@@ -14,7 +14,6 @@
             font-family: 'Cairo', sans-serif;
         }
 
-        /* Remove blue outline from all interactive elements */
         *:focus, *:focus-visible, *:active {
             outline: none !important;
             box-shadow: none !important;
@@ -72,61 +71,158 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 5, 11, 0.98);
-            backdrop-filter: blur(20px);
+            background: radial-gradient(circle at 30% 40%, #0a1228, #020408);
+            backdrop-filter: blur(25px);
             z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
+            animation: overlayFadeIn 0.5s ease;
         }
+        @keyframes overlayFadeIn {
+            from { opacity: 0; backdrop-filter: blur(0); }
+            to { opacity: 1; backdrop-filter: blur(25px); }
+        }
+        
         .password-card {
-            background: rgba(10, 20, 35, 0.95);
-            border-radius: 48px;
-            padding: 40px 28px;
+            background: rgba(5, 15, 30, 0.85);
+            border-radius: 56px;
+            padding: 48px 32px;
             width: 90%;
-            max-width: 380px;
-            border: 1px solid rgba(0, 255, 255, 0.5);
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+            max-width: 420px;
+            border: 1.5px solid rgba(0, 255, 200, 0.6);
+            box-shadow: 0 0 60px rgba(0, 180, 255, 0.3), inset 0 0 20px rgba(0, 255, 255, 0.1);
             text-align: center;
+            transform: translateY(0);
+            animation: cardFloat 3s infinite alternate;
         }
+        @keyframes cardFloat {
+            0% { transform: translateY(0); box-shadow: 0 0 40px rgba(0, 180, 255, 0.2); }
+            100% { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0, 255, 200, 0.4); }
+        }
+        
+        .password-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #00d4ff, #0066ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(0, 200, 255, 0.6);
+        }
+        .password-icon i {
+            font-size: 2.8rem;
+            color: white;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
+        }
+        
         .password-card h2 {
-            color: #aaf0ff;
+            color: #c0ffff;
             margin-bottom: 12px;
-            font-size: 1.6rem;
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 0 0 20px #00aaff;
+            letter-spacing: 1px;
         }
-        .password-card p {
-            color: #bbd9ff;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
+        
+        .password-card .subtitle {
+            color: #9cb8ff;
+            margin-bottom: 28px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 500;
         }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        
         .password-input {
             width: 100%;
-            padding: 14px 20px;
+            padding: 16px 48px 16px 20px;
             border-radius: 60px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #0ff;
-            color: white;
-            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            color: #e0f0ff;
+            font-size: 1.1rem;
             text-align: center;
+            letter-spacing: 4px;
+            transition: all 0.3s;
+            font-weight: 500;
         }
+        .password-input:focus {
+            border-color: #0ff;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .password-input::placeholder {
+            color: #4a6a8a;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+        }
+        
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0ff;
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+        
         .password-btn {
-            margin-top: 24px;
-            background: linear-gradient(145deg, #00b4aa, #0066cc);
+            margin-top: 8px;
+            background: linear-gradient(145deg, #00c9b0, #0077ee);
             border: none;
-            padding: 12px 28px;
-            border-radius: 40px;
+            padding: 16px 28px;
+            border-radius: 60px;
             color: white;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
-            font-size: 1rem;
-            transition: 0.2s;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 20px rgba(0, 100, 200, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         .password-btn:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 25px rgba(0, 255, 200, 0.5);
+            background: linear-gradient(145deg, #00e0c0, #0088ff);
         }
-        .error-msg { color: #ff8a7a; margin-top: 16px; font-size: 0.8rem; }
+        .password-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .error-msg {
+            color: #ff8a7a;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            min-height: 24px;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(255,0,0,0.3);
+        }
+        
+        .footer-note {
+            margin-top: 24px;
+            color: #6a8ab0;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .footer-note i {
+            color: #0ff;
+        }
 
         /* Main Chat */
         .chat-container {
@@ -339,21 +435,52 @@
             .icon-btn { width: 34px; height: 34px; font-size: 1.1rem; }
             .send-btn { padding: 6px 14px; font-size: 0.75rem; }
         }
+
+        .error-shake {
+            animation: shake 0.5s;
+            border-color: #ff6b6b !important;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
     </style>
 </head>
 <body>
 <div class="stars"></div>
 
+<!-- واجهة كلمة المرور -->
 <div id="passwordOverlay" class="password-overlay">
     <div class="password-card">
-        <h2><i class="fas fa-lock"></i> A&M Protected</h2>
-        <p>أدخل كلمة المرور للدخول إلى غرفة الدراسة الذكية</p>
-        <input type="password" id="passwordInput" class="password-input" placeholder="•••••••" autocomplete="off">
-        <button id="submitPassword" class="password-btn"><i class="fas fa-key"></i> دخول</button>
+        <div class="password-icon">
+            <i class="fas fa-shield-hal"></i>
+        </div>
+        <h2>A&M Nebula</h2>
+        <p class="subtitle">بوابة الدخول الآمنة</p>
+        
+        <div class="input-group">
+            <input type="password" id="passwordInput" class="password-input" placeholder="كلمة المرور" autocomplete="off" dir="ltr">
+            <i class="fas fa-key"></i>
+        </div>
+        
+        <button id="submitPassword" class="password-btn">
+            <i class="fas fa-arrow-left"></i>
+            دخول إلى المنصة
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        
         <div id="passError" class="error-msg"></div>
+        
+        <div class="footer-note">
+            <i class="fas fa-lock"></i>
+            <span>بيئة آمنة للطالبات</span>
+            <i class="fas fa-graduation-cap"></i>
+        </div>
     </div>
 </div>
 
+<!-- واجهة الشات الرئيسية -->
 <div id="chatApp" class="chat-container" style="display: none;">
     <div class="header">
         <div class="brand">
@@ -388,16 +515,39 @@
 </div>
 
 <script>
-    // ==================== API CONFIGURATION ====================
-    // ⚠️ IMPORTANT: Replace with your own API key from https://aistudio.google.com/apikey
-const API_KEY = "{{GEMINI_API_KEY}}";
-    // Using Google Gemini 2.0 Flash
-    // السطر 278 - هذا هو الرابط الصحيح
-const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
+    // ==================== إعدادات API ====================
+    // المفتاح هيتم جلبه بأمان من الخلفية (Netlify Function)
+    let API_KEY = "";
+    
+    const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
     
     const SYSTEM_PROMPT = `أنت معلم خصوصي لطالبات الصف الثاني الثانوي الأزهري. تتحدث بالعامية المصرية بشكل طبيعي ولطيف. دورك: شرح المواد (فيزياء، عربي، دين، إنجليزي، كيمياء، أحياء) بأسلوب بسيط. تحب الطالبات وتساعدهن في المذاكرة. ترد بشكل عفوي وطبيعي. إذا أرسلت الطالبة صورة، قم بتحليل محتواها وشرحه. استخدم رموز تعبيرية بسيطة. لا تخرج عن كونك معلم متخصص في المنهج الأزهري.`;
     
-    // ==================== DOM ELEMENTS ====================
+    // ==================== جلب المفتاح بأمان من الخلفية ====================
+    async function fetchApiKey() {
+        try {
+            const response = await fetch('/.netlify/functions/get-key');
+            
+            if (!response.ok) {
+                throw new Error('فشل في جلب مفتاح API');
+            }
+            
+            const data = await response.json();
+            API_KEY = data.apiKey;
+            
+            if (!API_KEY) {
+                throw new Error('لم يتم استلام مفتاح API');
+            }
+            
+            console.log('✅ تم تحميل مفتاح API بأمان');
+            return true;
+        } catch (error) {
+            console.error('❌ خطأ في تحميل مفتاح API:', error);
+            return false;
+        }
+    }
+    
+    // ==================== عناصر DOM ====================
     const passwordOverlay = document.getElementById('passwordOverlay');
     const chatApp = document.getElementById('chatApp');
     const chatMessagesDiv = document.getElementById('chatMessages');
@@ -410,13 +560,13 @@ const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-
     const submitPasswordBtn = document.getElementById('submitPassword');
     const passErrorDiv = document.getElementById('passError');
     
-    // ==================== VARIABLES ====================
+    // ==================== المتغيرات ====================
     const CORRECT_PASSWORD = "2010122";
     let messageHistory = [];
     let currentAttachedImage = null;
     let loadingElement = null;
     
-    // ==================== CHAT FUNCTIONS ====================
+    // ==================== دوال الشات ====================
     function loadChatHistory() {
         const stored = localStorage.getItem('aandm_real_ai');
         if (stored) {
@@ -513,8 +663,15 @@ const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-
         }
     }
     
-    // ==================== API CALL ====================
+    // ==================== استدعاء API ====================
     async function callGeminiAPI(userText, imageBase64) {
+        if (!API_KEY) {
+            const success = await fetchApiKey();
+            if (!success) {
+                throw new Error("مفتاح API غير متوفر");
+            }
+        }
+        
         const contents = [];
         let userPrompt = userText || "حلل هذه الصورة واشرح محتواها الدراسي";
         
@@ -611,7 +768,7 @@ const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-
         appendMessage('ai', "📢 تم استلام رسالتك! عشان تحصل على رد من الذكاء الاصطناعي الحقيقي (Gemini AI) اضغط على زر السحر ✨. أنا هنا اساعدك في المذاكرة!");
     }
     
-    // ==================== EVENT LISTENERS ====================
+    // ==================== مستمعي الأحداث ====================
     imageInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) {
@@ -649,15 +806,22 @@ const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-
         this.style.height = Math.min(this.scrollHeight, 80) + 'px';
     });
     
-    // ==================== AUTHENTICATION ====================
-    function authenticate(password) {
+    // ==================== المصادقة ====================
+    async function authenticate(password) {
         if (password === CORRECT_PASSWORD) {
-            passwordOverlay.style.display = 'none';
-            chatApp.style.display = 'flex';
-            loadChatHistory();
+            const keyLoaded = await fetchApiKey();
+            if (keyLoaded) {
+                passwordOverlay.style.display = 'none';
+                chatApp.style.display = 'flex';
+                loadChatHistory();
+            } else {
+                passErrorDiv.innerText = "❌ خطأ في تحميل النظام. حاول مرة أخرى.";
+            }
         } else {
-            passErrorDiv.innerText = "❌ كلمة المرور غير صحيحة. دخول ممنوع.";
+            passErrorDiv.innerText = "❌ كلمة المرور غير صحيحة";
             passwordInputField.value = '';
+            passwordInputField.classList.add('error-shake');
+            setTimeout(() => passwordInputField.classList.remove('error-shake'), 500);
         }
     }
     
