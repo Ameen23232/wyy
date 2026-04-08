@@ -390,8 +390,7 @@
 <script>
     // ==================== API CONFIGURATION ====================
     // ⚠️ IMPORTANT: Replace with your own API key from https://aistudio.google.com/apikey
-    const API_KEY = "AIzaSyD3BWdY0wriFKcY1-TYadmfP26lNNBULgE";
-    
+const API_KEY = process.env.GEMINI_API_KEY || "";
     // Using Google Gemini 2.0 Flash
     // السطر 278 - هذا هو الرابط الصحيح
 const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
