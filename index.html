@@ -1,4 +1,4 @@
-نم<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -234,15 +234,14 @@
 </div>
 
 <script>
-    // -------------------- إعدادات API (محدثة) --------------------
-    // -------------------- إعدادات API باستخدام OpenRouter --------------------
-const OPENROUTER_API_KEY = "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";
-const OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
-
-// نموذج قوي ومتخصص للإجابات التعليمية (DeepSeek عبر OpenRouter)
-const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث ومجاني
+    // -------------------- إعدادات API - Groq (بالمفتاح الجديد) --------------------
+    const GROQ_API_KEY = "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";
+    const GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
     
-    let messages = [];  // تخزين الرسائل للعرض فقط، لا نرسلها للAPI
+    // استخدام أحدث نموذج قوي ومجاني من Groq
+    const MODEL_NAME = "llama-3.3-70b-versatile";
+    
+    let messages = [];  // تخزين الرسائل للعرض فقط
     
     const chatContainer = document.getElementById('chatMessages');
     const messageInput = document.getElementById('messageInput');
@@ -295,7 +294,6 @@ const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث
         chatContainer.appendChild(messageDiv);
         chatContainer.scrollTop = chatContainer.scrollHeight;
         
-        // حفظ في الذاكرة المحلية (للتاريخ فقط)
         messages.push({ senderName, text, timestamp, isOwn, isTutor });
     }
     
@@ -307,7 +305,6 @@ const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث
         }
     }
     
-    // إرسال رسالة المستخدم
     async function sendUserMessage() {
         let text = messageInput.value.trim();
         if (!text) {
@@ -321,11 +318,7 @@ const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث
         setStatus("", false);
     }
     
-    // دالة استدعاء الذكاء الاصطناعي (معلمة الأزهر)
-        // دالة استدعاء الذكاء الاصطناعي (معلمة الأزهر) عبر OpenRouter
-        // دالة استدعاء الذكاء الاصطناعي (معلمة الأزهر) عبر OpenRouter - نسخة مصححة
     async function aiTutorRespondToLastUser() {
-        // البحث عن آخر رسالة ليست من المعلمة
         let lastUserMsg = null;
         for (let i = messages.length - 1; i >= 0; i--) {
             if (!messages[i].isTutor && messages[i].senderName !== "نظام الدردشة") {
@@ -343,7 +336,6 @@ const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث
         const userQuestion = lastUserMsg.text;
         setStatus("📚 الأستاذة تدرس سؤالك بعمق...", true);
         
-        // إعداد النظام كمعلمة خصوصية للأزهر
         const systemPrompt = `أنت أستاذة خصوصية متخصصة لطالبات الصف الثاني الثانوي الأزهري (دفعة 2026).
 مهمتك: الرد على أسئلة الطالبات في جميع مواد المنهج الأزهري الرسمي:
 - التفسير، الحديث، التوحيد، الفقه، النحو والصرف، البلاغة، الأدب، التاريخ الإسلامي، الجغرافيا.
@@ -358,14 +350,11 @@ const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث
 - ابدأي الرد بتحية قصيرة مثل "وعليكم السلام ورحمة الله، يا بنات..."`;
         
         try {
-            // إضافة header إضافي مطلوب من OpenRouter
-            const response = await fetch(OPENROUTER_ENDPOINT, {
+            const response = await fetch(GROQ_ENDPOINT, {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-                    "Content-Type": "application/json",
-                    "HTTP-Referer": window.location.href,  // مطلوب لـ OpenRouter
-                    "X-Title": "Azhar Tutor 2026"          // اسم التطبيق
+                    "Authorization": `Bearer ${GROQ_API_KEY}`,
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     model: MODEL_NAME,
@@ -380,11 +369,8 @@ const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث
             
             if (!response.ok) {
                 const errorData = await response.json();
-                console.error("تفاصيل الخطأ:", errorData);
                 let errorMsg = `خطأ ${response.status}`;
-                if (errorData.error) {
-                    errorMsg = errorData.error.message || JSON.stringify(errorData.error);
-                }
+                if (errorData.error && errorData.error.message) errorMsg = errorData.error.message;
                 throw new Error(errorMsg);
             }
             
@@ -392,7 +378,6 @@ const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث
             let aiReply = data.choices?.[0]?.message?.content;
             if (!aiReply) throw new Error("لم أتلق رداً من المعلمة");
             
-            // تنظيف بسيط
             aiReply = aiReply.replace(/【.*?】/g, '');
             addMessageToUI("أستاذة الأزهر - AI Tutor", aiReply, false, true);
             setStatus("✅ تم الرد بواسطة المعلمة الذكية", false);
@@ -400,25 +385,15 @@ const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث
             
         } catch (error) {
             console.error("AI error:", error);
-            let errorMessage = error.message;
-            // عرض رسالة خطأ مفهومة للمستخدم
-            if (errorMessage.includes("403")) {
-                errorMessage = "مفتاح API غير صالح أو تم إلغاؤه. الرجاء تحديث المفتاح من موقع OpenRouter.";
-            } else if (errorMessage.includes("429")) {
-                errorMessage = "تم تجاوز عدد الطلبات المسموحة. حاولي بعد قليل.";
-            } else if (errorMessage.includes("fetch")) {
-                errorMessage = "مشكلة في الاتصال بالإنترنت. تأكدي من اتصالك.";
-            }
-            setStatus(`⚠️ عذراً، حدث خطأ: ${errorMessage.substring(0, 100)}`, false);
-            addMessageToUI("أستاذة الأزهر - AI Tutor", `عذراً عزيزتي، حدث خطأ: ${errorMessage.substring(0, 150)}. تأكدي من صحة مفتاح API أو حاولي لاحقاً. 🌸`, false, true);
+            setStatus(`⚠️ عذراً، حدث خطأ: ${error.message.substring(0, 100)}`, false);
+            addMessageToUI("أستاذة الأزهر - AI Tutor", `عذراً عزيزتي، حدث خطأ: ${error.message.substring(0, 150)}. تأكدي من اتصالك بالإنترنت أو حاولي لاحقاً. 🌸`, false, true);
             setTimeout(() => setStatus("✨ جاهزة", false), 5000);
         }
-                                         }
-    // ربط الأزرار
+    }
+    
     sendBtn.addEventListener('click', sendUserMessage);
     aiRespondBtn.addEventListener('click', aiTutorRespondToLastUser);
     
-    // إرسال بالضغط على Enter (بدون Shift)
     messageInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -426,7 +401,6 @@ const MODEL_NAME = "google/gemma-2-9b-it:free";  // نموذج قوي ومحدث
         }
     });
     
-    // رسالة ترحيب إضافية بعد التحميل
     window.addEventListener('load', () => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
         setStatus("✨ مرحباً يا أزهريات 2026، اسأليني أي شيء في المنهج", false);
