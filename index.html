@@ -12,215 +12,244 @@
         }
 
         body {
-            background: radial-gradient(ellipse at top, #1a2a3a, #0a0f14);
+            background: #0b1016;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
-            font-family: -apple-system, 'Cairo', system-ui, sans-serif;
+            font-family: 'Cairo', -apple-system, system-ui, sans-serif;
             position: relative;
             overflow-x: hidden;
+            padding: 20px;
         }
 
-        /* ✨ خلفية النجوم الهادئة */
-        body::before {
-            content: '';
+        /* ✨ خلفية النجوم المتلألئة (كاملة) */
+        #starry-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: transparent;
-            box-shadow: 80px 20px 2px rgba(255, 255, 240, 0.6),
-                        200px 80px 1px rgba(255, 255, 245, 0.5),
-                        350px 30px 2px rgba(255, 240, 200, 0.4),
-                        500px 150px 1px rgba(210, 230, 255, 0.5),
-                        650px 40px 2px rgba(255, 255, 255, 0.6),
-                        800px 120px 1px rgba(255, 220, 180, 0.4),
-                        950px 60px 2px rgba(200, 220, 255, 0.5),
-                        1100px 200px 1px rgba(255, 255, 240, 0.6),
-                        1200px 10px 2px rgba(255, 245, 200, 0.4),
-                        150px 300px 1px rgba(230, 240, 255, 0.5),
-                        400px 400px 2px rgba(255, 235, 200, 0.6),
-                        700px 350px 1px rgba(255, 255, 255, 0.4),
-                        1000px 450px 2px rgba(210, 230, 255, 0.5),
-                        80px 550px 1px rgba(255, 220, 180, 0.4),
-                        300px 600px 2px rgba(200, 220, 255, 0.6),
-                        900px 700px 1px rgba(255, 245, 200, 0.5),
-                        600px 800px 2px rgba(255, 255, 255, 0.4),
-                        1100px 850px 1px rgba(230, 240, 255, 0.6);
-            border-radius: 50%;
-            pointer-events: none;
             z-index: 0;
+            pointer-events: none;
         }
 
-        /* هالة قمرية خفيفة */
-        body::after {
-            content: '';
+        .stars {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #f8f4e6;
+            border-radius: 50%;
+            box-shadow: 80px 20px #f8f4e6, 200px 80px #e3f0ff, 350px 30px #fff5e0, 
+                        500px 150px #d4e4ff, 650px 40px #ffeac2, 800px 120px #ffffff, 
+                        950px 60px #f2e5d0, 1100px 200px #d9ebff, 1200px 10px #fdf6e3,
+                        150px 300px #eef3ff, 400px 400px #f5e8cc, 700px 350px #ffffff,
+                        1000px 450px #dce8ff, 80px 550px #fae1b5, 300px 600px #c5dbff,
+                        900px 700px #fbf2dd, 600px 800px #ffffff, 1100px 850px #e6eeff;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+
+        .stars:nth-child(2) {
+            width: 1.5px;
+            height: 1.5px;
+            box-shadow: 120px 50px #f0e9d8, 300px 150px #ffffff, 480px 90px #dfecff, 
+                        700px 220px #f2e4c6, 880px 70px #c9ddff, 1050px 180px #fff9ed,
+                        180px 400px #d6e5ff, 500px 500px #f4e3c2, 850px 420px #ffffff,
+                        150px 700px #eef2f9, 400px 750px #faeaca, 1000px 650px #c7daff;
+            animation: twinkle 6s infinite reverse;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+
+        /* الهالة القمرية الكبيرة */
+        .moon-glow {
             position: fixed;
-            top: -10%;
-            left: -5%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255, 235, 200, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+            top: -15%;
+            right: -5%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(245, 235, 200, 0.12) 0%, rgba(220, 240, 255, 0.03) 60%, transparent 80%);
             border-radius: 50%;
             pointer-events: none;
-            z-index: 0;
+            z-index: 1;
+            filter: blur(25px);
         }
 
-        .app-container {
-            max-width: 750px;
+        /* غيوم ناعمة شفافة */
+        .cloud {
+            position: fixed;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            height: 94vh;
-            background: rgba(18, 25, 35, 0.85);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(200, 220, 255, 0.15);
-            border-radius: 40px;
+            height: 200px;
+            background: linear-gradient(to top, rgba(20, 40, 60, 0.3), transparent);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* الحاوية الرئيسية - قطعة واحدة فنية */
+        .app-container {
+            max-width: 820px;
+            width: 100%;
+            height: 92vh;
+            background: rgba(12, 22, 34, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 48px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.4),
-                        0 0 0 1px rgba(160, 200, 255, 0.1) inset,
-                        0 0 30px rgba(100, 150, 255, 0.2);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5),
+                        0 0 0 1.5px rgba(210, 230, 255, 0.15) inset,
+                        0 0 40px rgba(100, 160, 240, 0.1);
+            border: 1px solid rgba(255, 255, 245, 0.08);
             position: relative;
             z-index: 10;
         }
 
+        /* هيدر بلمسات قمرية */
         .chat-header {
-            background: linear-gradient(145deg, rgba(22, 32, 45, 0.9), rgba(15, 25, 35, 0.9));
-            padding: 1.5rem 1rem 1.2rem;
+            background: linear-gradient(135deg, rgba(16, 32, 48, 0.9) 0%, rgba(10, 20, 30, 0.8) 100%);
+            padding: 2rem 1.5rem 1.6rem;
             text-align: center;
-            border-bottom: 1px solid rgba(180, 210, 255, 0.2);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(200, 210, 240, 0.2);
             position: relative;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
         }
 
-        /* زخرفة نجمية في الهيدر */
-        .chat-header::after {
-            content: '✦ ✦ ✦';
+        .chat-header::before {
+            content: '';
             position: absolute;
-            bottom: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.7rem;
-            color: rgba(220, 210, 180, 0.5);
-            letter-spacing: 6px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #d6c294, #b4c8e0, #eace9f, transparent);
+            opacity: 0.6;
         }
 
         .chat-header h1 {
-            font-size: 1.5rem;
-            color: #f5e7c8;
-            text-shadow: 0 2px 8px rgba(180, 200, 255, 0.3);
-            font-weight: 500;
-            letter-spacing: -0.3px;
+            font-size: 1.9rem;
+            color: #f3e9d2;
+            text-shadow: 0 4px 15px rgba(140, 180, 230, 0.3);
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .chat-header p {
-            font-size: 0.75rem;
-            color: #bccbd8;
-            margin-top: 6px;
+            font-size: 0.9rem;
+            color: #cbdae6;
+            margin-top: 10px;
             opacity: 0.9;
         }
 
         .online-badge {
-            background: rgba(45, 85, 65, 0.7);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            color: #e3f0d8;
-            font-size: 0.65rem;
-            padding: 4px 14px;
-            border-radius: 30px;
+            background: rgba(50, 90, 100, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #e8f0e0;
+            font-size: 0.75rem;
+            padding: 6px 18px;
+            border-radius: 40px;
             display: inline-block;
-            margin-top: 10px;
-            border: 1px solid rgba(150, 210, 150, 0.3);
-            box-shadow: 0 0 8px rgba(120, 200, 100, 0.2);
+            margin-top: 14px;
+            border: 1px solid rgba(170, 220, 180, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 12px rgba(100, 190, 130, 0.2);
+            font-weight: 500;
         }
 
+        /* منطقة الرسائل - فسيحة ومريحة */
         .messages-area {
             flex: 1;
             overflow-y: auto;
-            padding: 1.2rem 1rem;
+            padding: 1.8rem 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 18px;
             background: transparent;
             scroll-behavior: smooth;
         }
 
         .messages-area::-webkit-scrollbar {
-            width: 5px;
+            width: 6px;
         }
 
         .messages-area::-webkit-scrollbar-track {
-            background: rgba(20, 30, 40, 0.3);
-            border-radius: 10px;
+            background: rgba(8, 18, 28, 0.4);
+            border-radius: 20px;
+            margin: 10px 0;
         }
 
         .messages-area::-webkit-scrollbar-thumb {
-            background: rgba(120, 160, 200, 0.4);
-            border-radius: 10px;
-            border: 1px solid rgba(200, 220, 255, 0.2);
+            background: rgba(130, 170, 210, 0.45);
+            border-radius: 20px;
+            border: 1px solid rgba(210, 230, 255, 0.2);
         }
 
         .message {
             display: flex;
-            gap: 12px;
-            animation: fadeIn 0.3s ease;
+            gap: 14px;
+            animation: floatIn 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes floatIn {
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .message-avatar {
-            width: 42px;
-            height: 42px;
+            width: 46px;
+            height: 46px;
             background: linear-gradient(145deg, #2e4e6a, #1a2f44);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             flex-shrink: 0;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(200, 220, 255, 0.1) inset;
-            border: 1px solid rgba(255, 255, 245, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(180, 210, 255, 0.15) inset;
+            border: 1px solid rgba(240, 235, 210, 0.2);
         }
 
         .message-content {
-            background: rgba(28, 40, 55, 0.8);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 12px 18px;
-            border-radius: 24px;
-            border-top-right-radius: 8px;
-            max-width: 85%;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(190, 215, 255, 0.1) inset;
-            border: 1px solid rgba(200, 215, 240, 0.12);
+            background: rgba(22, 36, 52, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 14px 20px;
+            border-radius: 28px;
+            border-top-right-radius: 10px;
+            max-width: 82%;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(200, 220, 250, 0.1) inset;
+            border: 1px solid rgba(210, 225, 250, 0.1);
         }
 
         .message-meta {
-            font-size: 0.65rem;
-            color: #b0c6dd;
+            font-size: 0.7rem;
+            color: #b8cee4;
             margin-bottom: 6px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
         }
 
         .message-author {
             font-weight: 600;
-            color: #f2e1c0;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            color: #f3e1be;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .message-text {
-            font-size: 0.95rem;
-            color: #eef3fc;
-            line-height: 1.5;
+            font-size: 1rem;
+            color: #f0f6ff;
+            line-height: 1.55;
             white-space: pre-wrap;
             word-break: break-word;
         }
@@ -230,10 +259,10 @@
         }
 
         .own-message .message-content {
-            background: rgba(50, 85, 100, 0.8);
-            border-top-left-radius: 8px;
-            border-top-right-radius: 24px;
-            box-shadow: 0 6px 14px rgba(0, 20, 40, 0.25), 0 0 0 1px rgba(140, 200, 230, 0.2) inset;
+            background: rgba(45, 75, 95, 0.75);
+            border-top-left-radius: 10px;
+            border-top-right-radius: 28px;
+            box-shadow: 0 8px 18px rgba(0, 20, 40, 0.3), 0 0 0 1px rgba(130, 190, 240, 0.2) inset;
         }
 
         .own-message .message-text {
@@ -241,98 +270,102 @@
         }
 
         .tutor-message .message-content {
-            background: rgba(60, 50, 70, 0.8);
-            border-right: 3px solid #dbb47a;
-            box-shadow: 0 6px 14px rgba(40, 30, 20, 0.2), 0 0 0 1px rgba(230, 190, 130, 0.15) inset;
+            background: rgba(55, 45, 65, 0.75);
+            border-right: 3px solid #e0bc7a;
+            box-shadow: 0 8px 18px rgba(30, 20, 15, 0.25), 0 0 0 1px rgba(240, 200, 130, 0.2) inset;
         }
 
         .tutor-message .message-author {
-            color: #f5dbb1;
+            color: #f8ddb2;
         }
 
+        /* لوحة الإدخال الفاخرة */
         .input-panel {
-            background: rgba(18, 28, 38, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 14px 16px 20px;
-            border-top: 1px solid rgba(160, 200, 250, 0.2);
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+            background: rgba(14, 26, 38, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 18px 20px 24px;
+            border-top: 1px solid rgba(170, 200, 250, 0.2);
+            box-shadow: 0 -10px 20px -5px rgba(0, 0, 0, 0.2);
         }
 
         .input-row {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: flex-end;
         }
 
         .input-row textarea {
             flex: 1;
-            border: 1.5px solid rgba(100, 160, 210, 0.35);
-            border-radius: 32px;
-            padding: 14px 20px;
-            font-size: 0.92rem;
+            border: 1.5px solid rgba(110, 170, 230, 0.35);
+            border-radius: 36px;
+            padding: 16px 22px;
+            font-size: 0.95rem;
             resize: none;
-            background: rgba(10, 20, 30, 0.7);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+            background: rgba(8, 18, 28, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             font-family: inherit;
             outline: none;
-            color: #f0f5ff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) inset, 0 0 8px rgba(70, 130, 200, 0.2);
-            transition: border 0.2s;
+            color: #f2f8ff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) inset, 0 0 10px rgba(60, 120, 200, 0.15);
+            transition: all 0.2s;
+            line-height: 1.4;
         }
 
         .input-row textarea::placeholder {
-            color: #9bb5cf;
+            color: #a4bedb;
             font-size: 0.9rem;
         }
 
         .input-row textarea:focus {
-            border-color: #b4a87c;
-            box-shadow: 0 0 12px rgba(220, 200, 140, 0.3);
+            border-color: #c9b27c;
+            box-shadow: 0 0 16px rgba(220, 190, 130, 0.25), 0 2px 8px rgba(0,0,0,0.3) inset;
         }
 
         button {
-            background: linear-gradient(145deg, #3f627c, #284a62);
+            background: linear-gradient(145deg, #426f8b, #2b5068);
             border: none;
-            color: #f2efe6;
-            padding: 12px 22px;
-            border-radius: 40px;
+            color: #f8f3e7;
+            padding: 14px 24px;
+            border-radius: 44px;
             font-weight: 600;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             transition: all 0.2s;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(200, 220, 250, 0.2) inset;
-            border: 1px solid rgba(255, 255, 240, 0.1);
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(210, 230, 255, 0.2) inset;
+            border: 1px solid rgba(255, 255, 245, 0.1);
             letter-spacing: 0.3px;
+            white-space: nowrap;
         }
 
         button:active {
-            transform: scale(0.96);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transform: scale(0.97);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
         .ai-btn {
-            background: linear-gradient(145deg, #9e7e5e, #7a5f46);
-            box-shadow: 0 8px 16px rgba(30, 20, 10, 0.4), 0 0 0 1px rgba(250, 220, 160, 0.25) inset;
+            background: linear-gradient(145deg, #a88662, #836a4c);
+            box-shadow: 0 10px 18px rgba(25, 15, 5, 0.4), 0 0 0 1px rgba(250, 220, 160, 0.3) inset;
         }
 
         .status {
-            font-size: 0.72rem;
-            color: #c7d9e8;
+            font-size: 0.8rem;
+            color: #d4e2f2;
             text-align: center;
-            margin-top: 14px;
-            text-shadow: 0 2px 5px #00000020;
+            margin-top: 16px;
+            text-shadow: 0 2px 8px #00000030;
+            font-weight: 400;
         }
 
         .loading {
             display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid #a6bbd0;
-            border-top-color: #f5e2b9;
+            width: 16px;
+            height: 16px;
+            border: 2.5px solid #a5bedb;
+            border-top-color: #f3dfb6;
             border-radius: 50%;
-            animation: spin 0.7s linear infinite;
+            animation: spin 0.8s linear infinite;
             margin-left: 8px;
             vertical-align: middle;
         }
@@ -342,37 +375,52 @@
         }
 
         footer {
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             text-align: center;
-            background: rgba(8, 16, 24, 0.7);
+            background: rgba(6, 14, 22, 0.7);
             backdrop-filter: blur(5px);
-            padding: 8px 6px;
-            color: #afc5db;
-            border-top: 1px solid rgba(160, 190, 220, 0.15);
-            letter-spacing: 0.3px;
+            padding: 10px 6px;
+            color: #b7cee5;
+            border-top: 1px solid rgba(150, 180, 220, 0.15);
+            letter-spacing: 0.4px;
         }
 
-        /* تأثير نجمي صغير متحرك (بطيء جداً) */
-        @keyframes subtleTwinkle {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 0.9; }
+        /* زخرفة نجمية في الفوتر */
+        footer::before {
+            content: '✦';
+            margin: 0 6px;
+            opacity: 0.5;
+        }
+        footer::after {
+            content: '✦';
+            margin: 0 6px;
+            opacity: 0.5;
         }
 
-        /* تحسينات للجوال */
-        @media (max-width: 550px) {
-            body { padding: 6px; }
-            .app-container { height: 96vh; border-radius: 30px; }
-            .message-content { max-width: 92%; }
-            .ai-btn { padding: 10px 14px; font-size: 0.75rem; }
-            button { padding: 10px 16px; }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .app-container { height: 94vh; border-radius: 36px; }
+            .chat-header h1 { font-size: 1.5rem; }
+            .message-content { max-width: 90%; }
+            .input-row { flex-wrap: wrap; }
+            .ai-btn, button { padding: 12px 18px; }
         }
     </style>
 </head>
 <body>
 
+<!-- خلفية النجوم الساحرة -->
+<div id="starry-bg">
+    <div class="stars"></div>
+    <div class="stars"></div>
+    <div class="moon-glow"></div>
+    <div class="cloud"></div>
+</div>
+
+<!-- قطعة التطبيق الواحدة -->
 <div class="app-container">
     <div class="chat-header">
-        <h1>📚 نور الأزهر | دفعة 2026</h1>
+        <h1>📚 نور الأزهر · ٢٠٢٦</h1>
         <p>معلمتك الخصوصية 🧑‍🏫 | دردشة مباشرة وجماعية</p>
         <div class="online-badge">🟢 أي رسالة تظهر للجميع فوراً</div>
     </div>
@@ -385,7 +433,7 @@
             <button id="sendBtn">📤 إرسال</button>
             <button id="aiRespondBtn" class="ai-btn">🤖 رد بالذكاء</button>
         </div>
-        <div id="statusMsg" class="status">✨ جاهزة للإجابة</div>
+        <div id="statusMsg" class="status">✨ جاهزة للإجابة · بليل هادي وجميل</div>
     </div>
     <footer>🗨️ كل الرسائل تظهر لكل الطالبات • حفظ تلقائي في السحابة • معلمة الأزهر الذكية</footer>
 </div>
@@ -521,7 +569,7 @@
             const text = messageInput.value.trim();
             if (!text) {
                 setStatus("⚠️ اكتبي سؤال أو رسالة", false);
-                setTimeout(() => setStatus("✨ جاهزة", false), 1500);
+                setTimeout(() => setStatus("✨ جاهزة للإجابة · بليل هادي وجميل", false), 1500);
                 return;
             }
             
@@ -533,7 +581,7 @@
                 await sendMessageToSheet(newId, currentUserName, currentUserId, text, Date.now(), false);
                 messageInput.value = '';
                 setStatus("✅ تم الإرسال", false);
-                setTimeout(() => setStatus("✨ جاهزة", false), 1500);
+                setTimeout(() => setStatus("✨ جاهزة للإجابة · بليل هادي وجميل", false), 1500);
                 await fetchMessages();
             } catch (error) {
                 setStatus("⚠️ فشل الإرسال، تأكدي من النت", false);
@@ -561,7 +609,7 @@
                 if (userMessages.length === 0) {
                     setStatus("⚠️ يابنتي اكتبي سؤالك الأول عشان أرد عليكِ", false);
                     isProcessing = false;
-                    setTimeout(() => setStatus("✨ جاهزة", false), 2000);
+                    setTimeout(() => setStatus("✨ جاهزة للإجابة · بليل هادي وجميل", false), 2000);
                     return;
                 }
                 
@@ -641,7 +689,7 @@ Now wait for the student to ask a question and begin teaching.".`;
                 await fetchMessages();
                 
                 setStatus("✅ تم الرد", false);
-                setTimeout(() => setStatus("✨ اسألي تاني لو حابة", false), 3000);
+                setTimeout(() => setStatus("✨ اسألي تاني لو حابة · الليل طويل وجميل", false), 3000);
                 
             } catch (error) {
                 console.error("AI Error:", error);
@@ -700,7 +748,7 @@ Now wait for the student to ask a question and begin teaching.".`;
                 }
             });
             
-            setStatus("✨ مرحباً يا أزهريات 2026", false);
+            setStatus("✨ مرحباً يا أزهريات 2026 · ليلة هادئة", false);
         }
         
         if (document.readyState === 'loading') {
