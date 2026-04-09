@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>أزهريات 2026 | شات الأزهر</title>
+    <title>أزهريات 2026 | شات مباشر + معلمة ذكية</title>
     <style>
         * {
             margin: 0;
@@ -18,11 +18,11 @@
             justify-content: center;
             align-items: center;
             padding: 16px;
-            font-family: -apple-system, 'SF Pro Text', 'Cairo', system-ui, sans-serif;
+            font-family: -apple-system, 'Cairo', system-ui, sans-serif;
         }
 
         .app-container {
-            max-width: 800px;
+            max-width: 750px;
             width: 100%;
             height: 94vh;
             background: #121812;
@@ -33,37 +33,31 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* Header */
         .chat-header {
             background: #1a221a;
-            padding: 1.2rem;
+            padding: 1rem;
             text-align: center;
             border-bottom: 1px solid #2a302a;
         }
         .chat-header h1 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: #9ece9e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
         }
         .chat-header p {
             font-size: 0.7rem;
             color: #8a9a88;
-            margin-top: 6px;
+            margin-top: 4px;
         }
-        .online-info {
+        .online-badge {
             background: #2c5a2e;
             color: #9ece9e;
             font-size: 0.65rem;
-            padding: 4px 12px;
+            padding: 3px 12px;
             border-radius: 20px;
             display: inline-block;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
-        /* Messages area */
         .messages-area {
             flex: 1;
             overflow-y: auto;
@@ -79,14 +73,12 @@
         }
         .messages-area::-webkit-scrollbar-track {
             background: #1a221a;
-            border-radius: 10px;
         }
         .messages-area::-webkit-scrollbar-thumb {
             background: #3a4a3a;
             border-radius: 10px;
         }
 
-        /* Message bubble */
         .message {
             display: flex;
             gap: 10px;
@@ -124,6 +116,12 @@
             margin-bottom: 5px;
             display: flex;
             gap: 10px;
+            align-items: center;
+        }
+
+        .message-author {
+            font-weight: 600;
+            color: #c0dcc0;
         }
 
         .message-text {
@@ -134,7 +132,6 @@
             word-break: break-word;
         }
 
-        /* Own message */
         .own-message {
             flex-direction: row-reverse;
         }
@@ -147,7 +144,6 @@
             color: #ffffff;
         }
 
-        /* Tutor message */
         .tutor-message .message-content {
             background: #2a2218;
             border-right: 3px solid #b47c48;
@@ -156,7 +152,6 @@
             color: #f0b87a;
         }
 
-        /* Input area */
         .input-panel {
             background: #1a221a;
             padding: 12px 16px 20px;
@@ -184,10 +179,6 @@
 
         .input-row textarea::placeholder {
             color: #5a6a58;
-        }
-
-        .input-row textarea:focus {
-            border-color: #6f9e6f;
         }
 
         button {
@@ -246,6 +237,7 @@
             .app-container { height: 95vh; border-radius: 24px; }
             .message-content { max-width: 90%; }
             .ai-btn { padding: 8px 14px; font-size: 0.75rem; }
+            button { padding: 8px 14px; }
         }
     </style>
 </head>
@@ -254,8 +246,8 @@
 <div class="app-container">
     <div class="chat-header">
         <h1>📚 نور الأزهر | دفعة 2026</h1>
-        <p>معلمتك الخصوصية 🧑‍🏫 | دردشة جماعية 👥</p>
-        <div class="online-info">🟢 جميع الطالبات يرون كل الرسائل</div>
+        <p>معلمتك الخصوصية 🧑‍🏫 | دردشة مباشرة وجماعية</p>
+        <div class="online-badge">🟢 أي رسالة تظهر للجميع فوراً</div>
     </div>
 
     <div class="messages-area" id="chatMessages"></div>
@@ -268,20 +260,21 @@
         </div>
         <div id="statusMsg" class="status">✨ جاهزة للإجابة</div>
     </div>
-    <footer>🗨️ كل الرسائل تظهر لكل الطالبات • حفظ تلقائي • معلمة الأزهر الذكية</footer>
+    <footer>🗨️ كل الرسائل تظهر لكل الطالبات • حفظ تلقائي في السحابة • معلمة الأزهر الذكية</footer>
 </div>
 
 <script>
     (function() {
+        // -------------------- إعدادات Google Sheets API --------------------
+        // تم إدخال الرابط الخاص بك هنا
+        const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbx9AUm_QgcXQSaPEMed3TNCylvH9ORqpiOrZtLYqel9Frb2-OlBjI7d64_ZtIar4KjR/exec";
+        
         // -------------------- إعدادات Groq API --------------------
         const GROQ_API_KEY = "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";
         const GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
         const MODEL_NAME = "llama-3.3-70b-versatile";
         
-        // -------------------- إعدادات التخزين --------------------
-        const STORAGE_KEY = "azhar_group_chat";
-        
-        // هوية المستخدم
+        // -------------------- هوية المستخدم --------------------
         let currentUserId = localStorage.getItem('azhar_user_id');
         if (!currentUserId) {
             currentUserId = 'user_' + Math.random().toString(36).substr(2, 10);
@@ -290,28 +283,14 @@
         
         let currentUserName = localStorage.getItem('azhar_user_name');
         if (!currentUserName) {
-            const names = ['نور', 'أمل', 'سارة', 'ليلى', 'مريم', 'حبيبة', 'فاطمة', 'زينب'];
-            currentUserName = names[Math.floor(Math.random() * names.length)] + '_' + Math.floor(Math.random() * 100);
+            const names = ['نور', 'أمل', 'سارة', 'ليلى', 'مريم', 'حبيبة', 'فاطمة', 'زينب', 'آية', 'جنى'];
+            currentUserName = names[Math.floor(Math.random() * names.length)];
             localStorage.setItem('azhar_user_name', currentUserName);
         }
         
-        // مصفوفة الرسائل
-        let messages = [];
-        
         // عناصر DOM
         let chatContainer, messageInput, sendBtn, aiRespondBtn, statusDiv;
-        
-        // دالة تنظيف النص
-        function cleanText(text) {
-            if (!text) return '';
-            text = text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uac00-\ud7af\u3040-\u30ff]/g, '');
-            text = text.replace(/【.*?】/g, '');
-            text = text.replace(/\[.*?\]/g, '');
-            text = text.replace(/وعليكم السلام ورحمة الله وبركاته/gi, '');
-            text = text.replace(/السلام عليكم ورحمة الله وبركاته/gi, '');
-            text = text.replace(/السلام عليكم/gi, '');
-            return text.trim();
-        }
+        let isProcessing = false;
         
         function escapeHtml(str) {
             if (!str) return '';
@@ -321,198 +300,6 @@
                 if (m === '>') return '&gt;';
                 return m;
             });
-        }
-        
-        // حفظ الرسائل
-        function saveMessages() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-            // بث لكل النوافذ المفتوحة
-            if (window.broadcastChannel) {
-                window.broadcastChannel.postMessage({ type: 'update', messages: messages });
-            }
-        }
-        
-        // عرض الرسائل
-        function renderMessages() {
-            if (!chatContainer) return;
-            chatContainer.innerHTML = '';
-            
-            messages.forEach(msg => {
-                const isOwn = (msg.userId === currentUserId);
-                const isTutor = msg.isTutor === true;
-                
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message';
-                if (isOwn) messageDiv.classList.add('own-message');
-                if (isTutor) messageDiv.classList.add('tutor-message');
-                
-                const avatar = document.createElement('div');
-                avatar.className = 'message-avatar';
-                if (isTutor) avatar.innerText = '🧑‍🏫';
-                else if (isOwn) avatar.innerText = '👧';
-                else avatar.innerText = '👩‍🎓';
-                
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'message-content';
-                
-                const metaDiv = document.createElement('div');
-                metaDiv.className = 'message-meta';
-                const timeStr = msg.timeStr || new Date(msg.timestamp).toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' });
-                metaDiv.innerHTML = `<span class="message-author">${escapeHtml(msg.author)}</span><span>${timeStr}</span>`;
-                
-                const textDiv = document.createElement('div');
-                textDiv.className = 'message-text';
-                textDiv.innerHTML = `<p style="margin:0; white-space:pre-wrap;">${escapeHtml(msg.text)}</p>`;
-                
-                contentDiv.appendChild(metaDiv);
-                contentDiv.appendChild(textDiv);
-                messageDiv.appendChild(avatar);
-                messageDiv.appendChild(contentDiv);
-                
-                chatContainer.appendChild(messageDiv);
-            });
-            
-            // التمرير للأسفل
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-        
-        // تحميل الرسائل من التخزين
-        function loadMessages() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                try {
-                    messages = JSON.parse(saved);
-                } catch(e) {
-                    messages = [];
-                }
-            }
-            
-            // إذا مفيش رسائل، نضيف رسالة ترحيب
-            if (messages.length === 0) {
-                messages.push({
-                    id: Date.now(),
-                    userId: 'tutor',
-                    author: 'أستاذة نور',
-                    text: 'أهلاً يا حبيباتي دفعة 2026 🌙\nأنا أستاذة نور، معلمتكم الخصوصية. اسألوا عن أي حاجة في المنهج الأزهري، وبكلمكم باللهجة المصرية اللطيفة. متفتحة معاكم ومبسوطة بيكم 🤍',
-                    timestamp: Date.now(),
-                    isTutor: true,
-                    timeStr: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' })
-                });
-                saveMessages();
-            }
-            
-            renderMessages();
-        }
-        
-        // إرسال رسالة
-        async function sendMessage() {
-            const text = messageInput.value.trim();
-            if (!text) {
-                setStatus("⚠️ اكتبي سؤال أو رسالة", false);
-                setTimeout(() => setStatus("✨ جاهزة", false), 1500);
-                return;
-            }
-            
-            const newMessage = {
-                id: Date.now(),
-                userId: currentUserId,
-                author: currentUserName,
-                text: text,
-                timestamp: Date.now(),
-                isTutor: false,
-                timeStr: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' })
-            };
-            
-            messages.push(newMessage);
-            saveMessages();
-            renderMessages();
-            messageInput.value = '';
-            setStatus("✅ تم الإرسال", false);
-            setTimeout(() => setStatus("✨ جاهزة", false), 1500);
-        }
-        
-        // رد الذكاء الاصطناعي
-        async function aiRespond() {
-            // البحث عن آخر رسالة مش من الأستاذة
-            const lastUserMessage = [...messages].reverse().find(m => !m.isTutor);
-            
-            if (!lastUserMessage) {
-                setStatus("⚠️ اكتبي سؤالك الأول عشان أرد عليكِ", false);
-                setTimeout(() => setStatus("✨ جاهزة", false), 2000);
-                return;
-            }
-            
-            setStatus("📚 الأستاذة بتفكر...", true);
-            
-            const systemPrompt = `أنت أستاذة خصوصية مصرية لطالبات الصف الثاني الثانوي الأزهري (دفعة 2026). اسمك "أستاذة نور".
-أسلوبك باللهجة المصرية اللطيفة والعفوية. لو الطالبة سألت سؤال زي "عامله ايه" أو "ازيك" تردي بلطف وتقولي "أنا زي الفل يا حبيبتي، ربنا يخليكي، عندك سؤال في المنهج؟"
-ماتفتحيش كل رد بتحية "وعليكم السلام". ماتستخدميش كلمات صينية خالص. خلي ردودك طبيعية مصرية ومفيدة.
-لو السؤال عن المنهج: اشرحي بشكل دقيق ومبسط مع أمثلة من الكتاب المدرسي.
-خلي ردودك بين 50 و 250 كلمة.
-ابدأي الرد مباشرة بدون أي تحية.`;
-            
-            try {
-                const response = await fetch(GROQ_ENDPOINT, {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${GROQ_API_KEY}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        model: MODEL_NAME,
-                        messages: [
-                            { role: "system", content: systemPrompt },
-                            { role: "user", content: lastUserMessage.text }
-                        ],
-                        temperature: 0.8,
-                        max_tokens: 1000
-                    })
-                });
-                
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error?.message || "خطأ في الاتصال");
-                }
-                
-                const data = await response.json();
-                let aiReply = data.choices?.[0]?.message?.content;
-                if (!aiReply) throw new Error("لا يوجد رد");
-                
-                aiReply = cleanText(aiReply);
-                
-                const newMessage = {
-                    id: Date.now(),
-                    userId: 'tutor',
-                    author: 'أستاذة نور',
-                    text: aiReply,
-                    timestamp: Date.now(),
-                    isTutor: true,
-                    timeStr: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' })
-                };
-                
-                messages.push(newMessage);
-                saveMessages();
-                renderMessages();
-                setStatus("✅ تم الرد", false);
-                setTimeout(() => setStatus("✨ اسألي تاني لو حابة", false), 3000);
-                
-            } catch (error) {
-                console.error("AI Error:", error);
-                setStatus(`⚠️ خطأ: ${error.message.substring(0, 80)}`, false);
-                
-                const errorMessage = {
-                    id: Date.now(),
-                    userId: 'tutor',
-                    author: 'أستاذة نور',
-                    text: "آسفة يا قمر، فيه مشكلة تقنية بسيطة. جربي تاني كده أو شيكي على النت 🌸",
-                    timestamp: Date.now(),
-                    isTutor: true,
-                    timeStr: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' })
-                };
-                messages.push(errorMessage);
-                saveMessages();
-                renderMessages();
-            }
         }
         
         function setStatus(msg, isLoading = false) {
@@ -525,18 +312,212 @@
             }
         }
         
-        // إعداد البث بين النوافذ
-        function setupBroadcast() {
-            window.broadcastChannel = new BroadcastChannel('azhar_chat_2026');
-            window.broadcastChannel.onmessage = (event) => {
-                if (event.data.type === 'update') {
-                    messages = event.data.messages;
-                    renderMessages();
-                }
-            };
+        function cleanText(text) {
+            if (!text) return '';
+            text = text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uac00-\ud7af\u3040-\u30ff]/g, '');
+            text = text.replace(/【.*?】/g, '');
+            text = text.replace(/\[.*?\]/g, '');
+            text = text.replace(/وعليكم السلام ورحمة الله وبركاته/gi, '');
+            text = text.replace(/السلام عليكم ورحمة الله وبركاته/gi, '');
+            text = text.replace(/السلام عليكم/gi, '');
+            return text.trim();
         }
         
-        // تهيئة العناصر بعد تحميل الصفحة
+        let displayedMessages = new Set();
+        
+        function displayMessage(id, author, authorId, text, timestamp, isTutor) {
+            if (displayedMessages.has(id)) return;
+            displayedMessages.add(id);
+            if (!chatContainer) return;
+            
+            const isOwn = (authorId === currentUserId);
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            if (isOwn) messageDiv.classList.add('own-message');
+            if (isTutor) messageDiv.classList.add('tutor-message');
+            messageDiv.id = `msg-${id}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            if (isTutor) avatar.innerText = '🧑‍🏫';
+            else if (isOwn) avatar.innerText = '👧';
+            else avatar.innerText = '👩‍🎓';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'message-meta';
+            const timeStr = timestamp ? new Date(timestamp).toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' }) : 'الآن';
+            metaDiv.innerHTML = `<span class="message-author">${escapeHtml(author)}</span><span>${timeStr}</span>`;
+            
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            textDiv.innerHTML = `<p style="margin:0; white-space:pre-wrap;">${escapeHtml(text)}</p>`;
+            
+            contentDiv.appendChild(metaDiv);
+            contentDiv.appendChild(textDiv);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        async function fetchMessages() {
+            try {
+                const response = await fetch(`${SHEET_API_URL}?action=get&t=${Date.now()}`);
+                const data = await response.json();
+                
+                if (data.success && data.messages) {
+                    data.messages.forEach(msg => {
+                        displayMessage(msg.id, msg.author, msg.authorId, msg.text, msg.timestamp, msg.isTutor === true);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching messages:", error);
+            }
+        }
+        
+        async function sendMessageToSheet(id, author, authorId, text, timestamp, isTutor) {
+            try {
+                const url = `${SHEET_API_URL}?action=post&id=${encodeURIComponent(id)}&author=${encodeURIComponent(author)}&authorId=${encodeURIComponent(authorId)}&text=${encodeURIComponent(text)}&timestamp=${timestamp}&isTutor=${isTutor}`;
+                await fetch(url);
+            } catch (error) {
+                console.error("Error sending message:", error);
+                throw error;
+            }
+        }
+        
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) {
+                setStatus("⚠️ اكتبي سؤال أو رسالة", false);
+                setTimeout(() => setStatus("✨ جاهزة", false), 1500);
+                return;
+            }
+            
+            setStatus("📤 جاري الإرسال...", true);
+            
+            const newId = Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5);
+            
+            try {
+                await sendMessageToSheet(newId, currentUserName, currentUserId, text, Date.now(), false);
+                messageInput.value = '';
+                setStatus("✅ تم الإرسال", false);
+                setTimeout(() => setStatus("✨ جاهزة", false), 1500);
+                await fetchMessages();
+            } catch (error) {
+                setStatus("⚠️ فشل الإرسال، تأكدي من النت", false);
+            }
+        }
+        
+        async function aiRespond() {
+            if (isProcessing) {
+                setStatus("⚠️ استني شوية، الأستاذة بترد حالياً", false);
+                return;
+            }
+            
+            isProcessing = true;
+            setStatus("📚 الأستاذة بتفكر...", true);
+            
+            try {
+                const response = await fetch(`${SHEET_API_URL}?action=get&t=${Date.now()}`);
+                const data = await response.json();
+                
+                if (!data.success || !data.messages) {
+                    throw new Error("Failed to fetch messages");
+                }
+                
+                const userMessages = data.messages.filter(m => m.authorId !== 'tutor_bot');
+                if (userMessages.length === 0) {
+                    setStatus("⚠️ يابنتي اكتبي سؤالك الأول عشان أرد عليكِ", false);
+                    isProcessing = false;
+                    setTimeout(() => setStatus("✨ جاهزة", false), 2000);
+                    return;
+                }
+                
+                const lastMessage = userMessages[userMessages.length - 1];
+                const userQuestion = lastMessage.text;
+                const questionAuthor = lastMessage.author;
+                
+                const systemPrompt = `أنت أستاذة خصوصية مصرية لطالبات الصف الثاني الثانوي الأزهري (دفعة 2026). اسمك "أستاذة نور".
+
+قواعد مهمة جداً:
+1. تكلمي باللهجة المصرية البسيطة واللطيفة.
+2. لو الطالبة سألت "عامله ايه" أو "ازيك" أو "عامل إيه"، ردّي: "أنا زي الفل يا حبيبتي، ربنا يخليكي. إنتي عاملة إيه؟ عندك سؤال في المنهج ولا حاجة تساعديني فيها؟"
+3. مفيش تحية "وعليكم السلام" في كل رد - ابداي مباشرة.
+4. ممنوع استخدام أي كلمات صينية أو يابانية.
+5. لو السؤال عن المنهج: اشرحي بإيجاز وبساطة مع مثال.
+6. خلي ردك قصير ولطيف (بين 20 و 120 كلمة).
+7. استخدمي كلمات زي "يا حبيبتي، يا قمر، يا ست الكل".`;
+
+                const groqResponse = await fetch(GROQ_ENDPOINT, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${GROQ_API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: MODEL_NAME,
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: userQuestion }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 500
+                    })
+                });
+                
+                if (!groqResponse.ok) {
+                    throw new Error("API error");
+                }
+                
+                const groqData = await groqResponse.json();
+                let aiReply = groqData.choices?.[0]?.message?.content;
+                if (!aiReply) throw new Error("No reply");
+                
+                aiReply = cleanText(aiReply);
+                
+                const newId = Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5);
+                await sendMessageToSheet(newId, "أستاذة نور", "tutor_bot", aiReply, Date.now(), true);
+                await fetchMessages();
+                
+                setStatus("✅ تم الرد", false);
+                setTimeout(() => setStatus("✨ اسألي تاني لو حابة", false), 3000);
+                
+            } catch (error) {
+                console.error("AI Error:", error);
+                setStatus(`⚠️ خطأ: ${error.message.substring(0, 80)}`, false);
+                
+                const newId = Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5);
+                await sendMessageToSheet(newId, "أستاذة نور", "tutor_bot", "آسفة يا قمر، فيه مشكلة تقنية بسيطة. جربي تاني كده 🌸", Date.now(), true);
+                await fetchMessages();
+            } finally {
+                isProcessing = false;
+            }
+        }
+        
+        let autoRefreshInterval;
+        
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                fetchMessages();
+            }, 2000);
+        }
+        
+        async function addWelcomeMessageIfNeeded() {
+            const response = await fetch(`${SHEET_API_URL}?action=get&t=${Date.now()}`);
+            const data = await response.json();
+            
+            if (data.success && (!data.messages || data.messages.length === 0)) {
+                const welcomeId = Date.now().toString() + '_welcome';
+                await sendMessageToSheet(welcomeId, "أستاذة نور", "tutor_bot", "أهلاً يا حبيباتي دفعة 2026 🌙\nأنا أستاذة نور، معلمتكم الخصوصية. اسألوا عن أي حاجة في المنهج الأزهري، وبكلمكم باللهجة المصرية اللطيفة. متفتحة معاكم ومبسوطة بيكم 🤍", Date.now(), true);
+                await fetchMessages();
+            }
+        }
+        
         function init() {
             chatContainer = document.getElementById('chatMessages');
             messageInput = document.getElementById('messageInput');
@@ -544,13 +525,14 @@
             aiRespondBtn = document.getElementById('aiRespondBtn');
             statusDiv = document.getElementById('statusMsg');
             
-            if (!chatContainer || !sendBtn || !aiRespondBtn) {
+            if (!chatContainer) {
                 console.error("عناصر غير موجودة");
                 return;
             }
             
-            loadMessages();
-            setupBroadcast();
+            fetchMessages();
+            addWelcomeMessageIfNeeded();
+            startAutoRefresh();
             
             sendBtn.addEventListener('click', sendMessage);
             aiRespondBtn.addEventListener('click', aiRespond);
@@ -565,7 +547,6 @@
             setStatus("✨ مرحباً يا أزهريات 2026", false);
         }
         
-        // تشغيل بعد تحميل الصفحة
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
         } else {
