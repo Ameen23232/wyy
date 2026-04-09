@@ -519,7 +519,7 @@
     // المفتاح هيتم جلبه بأمان من Cloudflare Worker
     let API_KEY = "";
     
-    const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+    const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
     
     const SYSTEM_PROMPT = `أنت معلم خصوصي لطالبات الصف الثاني الثانوي الأزهري. تتحدث بالعامية المصرية بشكل طبيعي ولطيف. دورك: شرح المواد (فيزياء، عربي، دين، إنجليزي، كيمياء، أحياء) بأسلوب بسيط. تحب الطالبات وتساعدهن في المذاكرة. ترد بشكل عفوي وطبيعي. إذا أرسلت الطالبة صورة، قم بتحليل محتواها وشرحه. استخدم رموز تعبيرية بسيطة. لا تخرج عن كونك معلم متخصص في المنهج الأزهري.`;
     
