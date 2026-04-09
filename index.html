@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>أزهريات 2026 | معلمتك الذكية</title>
+    <title>أزهريات 2026 | معلمتك الذكية | دردشة جماعية</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -21,7 +26,6 @@
             font-family: -apple-system, 'SF Pro Text', 'SF Pro Display', 'Cairo', 'Segoe UI', system-ui, sans-serif;
         }
 
-        /* iOS-style container */
         .app-container {
             max-width: 750px;
             width: 100%;
@@ -32,41 +36,43 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            backdrop-filter: blur(2px);
-            transition: all 0.3s ease;
         }
 
-        /* iOS Header with blur */
         .chat-header {
             background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(20px);
-            padding: 1.2rem 1.5rem;
+            padding: 1rem 1.2rem;
             text-align: center;
             border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
         }
         .chat-header h1 {
-            font-size: 1.7rem;
+            font-size: 1.5rem;
             font-weight: 650;
             background: linear-gradient(135deg, #2c5a2e, #4a7c4e);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            letter-spacing: -0.3px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
         .chat-header p {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #6c7a6e;
             font-weight: 500;
-            margin-top: 6px;
-            letter-spacing: -0.2px;
+            margin-top: 4px;
+        }
+        .online-badge {
+            background: #4caf50;
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 4px;
         }
 
-        /* Messages area - iOS style */
         .messages-area {
             flex: 1;
             overflow-y: auto;
@@ -78,7 +84,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Hide scrollbar for cleaner look */
         .messages-area::-webkit-scrollbar {
             width: 4px;
         }
@@ -90,7 +95,6 @@
             border-radius: 10px;
         }
 
-        /* iOS Message Bubbles */
         .message {
             display: flex;
             gap: 10px;
@@ -120,7 +124,6 @@
             font-size: 1.1rem;
             flex-shrink: 0;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-            backdrop-filter: blur(4px);
         }
 
         .message-content {
@@ -128,8 +131,7 @@
             padding: 10px 16px;
             border-radius: 24px;
             border-top-right-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-            transition: transform 0.1s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
 
         .message-meta {
@@ -139,7 +141,6 @@
             display: flex;
             gap: 10px;
             font-weight: 500;
-            letter-spacing: -0.2px;
         }
 
         .message-text {
@@ -149,14 +150,6 @@
             font-weight: 450;
         }
 
-        .message-text img {
-            max-width: 100%;
-            border-radius: 18px;
-            margin-top: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-        }
-
-        /* Own message (user) */
         .own-message {
             align-self: flex-end;
             flex-direction: row-reverse;
@@ -167,14 +160,11 @@
             border-top-right-radius: 24px;
         }
 
-        /* Tutor message (AI) */
         .tutor-message .message-content {
-            background: #ffffff;
-            border-right: 3px solid #6f9e6f;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            background: #fff2e3;
+            border-right: 3px solid #b47c48;
         }
 
-        /* Input Panel - iOS style */
         .input-panel {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
@@ -202,7 +192,6 @@
             font-family: inherit;
             outline: none;
             transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
         .input-row textarea:focus {
@@ -220,21 +209,14 @@
             cursor: pointer;
             font-size: 0.85rem;
             transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         button:active {
             transform: scale(0.96);
-            background: #1f421f;
         }
 
         .ai-btn {
             background: #b47c48;
-            box-shadow: 0 2px 8px rgba(180, 124, 72, 0.2);
-        }
-
-        .ai-btn:active {
-            background: #9b623a;
         }
 
         .status {
@@ -242,7 +224,6 @@
             color: #8fa18d;
             text-align: center;
             font-weight: 500;
-            letter-spacing: -0.2px;
         }
 
         .loading {
@@ -268,7 +249,6 @@
             padding: 6px;
             color: #9aae98;
             font-weight: 500;
-            letter-spacing: -0.2px;
             border-top: 0.5px solid rgba(0, 0, 0, 0.03);
         }
 
@@ -277,7 +257,7 @@
             .app-container { height: 94vh; border-radius: 32px; }
             .message { max-width: 94%; }
             .ai-btn { padding: 8px 14px; font-size: 0.75rem; }
-            .chat-header h1 { font-size: 1.3rem; }
+            .chat-header h1 { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -286,50 +266,68 @@
 <div class="app-container">
     <div class="chat-header">
         <h1>📖 نور الأزهر | 2026</h1>
-        <p>معلمتك الخصوصية 🧑‍🏫 | دردشة موحدة للطالبات</p>
+        <p>معلمتك الخصوصية 🧑‍🏫 | دردشة جماعية 👥</p>
+        <div class="online-badge">🟢 جميع الطالبات يتحدثن هنا</div>
     </div>
 
-    <div class="messages-area" id="chatMessages">
-        <div class="message tutor-message">
-            <div class="message-avatar">🧑‍🏫</div>
-            <div class="message-content">
-                <div class="message-meta"><span>أستاذة الأزهر AI</span><span>🕊️</span></div>
-                <div class="message-text">السلام عليكم يا بنات دفعة 2026 ورحمة الله وبركاته 🌸<br><br>أنا معلمتكم الخصوصية الذكية، متخصصة في جميع مناهج الصف الثاني الثانوي الأزهري: التفسير، الحديث، التوحيد، الفقه، النحو، البلاغة، الأدب، التاريخ، الجغرافيا، الرياضيات، العلوم، والإنجليزية.<br><br>اسأليني عن أي درس أو فكرة، وسأجيبكِ بشرح وافٍ واحترافي، مع أمثلة من الكتاب المدرسي. يمكنكم أيضاً الدردشة مع بعضكن بحرية.<br><br>✨ اضغطي على زر "رد بالذكاء الاصطناعي" بعد كتابة سؤالك، وسأقوم بالرد فوراً.</div>
-            </div>
-        </div>
-        <div class="message">
-            <div class="message-avatar">💬</div>
-            <div class="message-content">
-                <div class="message-meta"><span>نظام الدردشة</span></div>
-                <div class="message-text">🌟 هذه غرفة موحدة — جميع الطالبات يرون الرسائل. اكتبي سؤالك الدراسي أو ردي على زميلاتك.</div>
-            </div>
-        </div>
-    </div>
+    <div class="messages-area" id="chatMessages"></div>
 
     <div class="input-panel">
         <div class="input-row">
-            <textarea id="messageInput" rows="1" placeholder="اسألي عن أي درس... (مثال: اشرحي قاعدة الممنوع من الصرف، أو حلي مسألة التفاضل)"></textarea>
+            <textarea id="messageInput" rows="1" placeholder="اسألي عن أي درس... أو قوليلي عامله ايه 😊"></textarea>
             <button id="sendBtn">📤 إرسال</button>
             <button id="aiRespondBtn" class="ai-btn">🤖 رد بالذكاء</button>
         </div>
         <div id="statusMsg" class="status">✨ جاهزة للإجابة على أسئلتك الدراسية</div>
     </div>
-    <footer>معلمة الأزهر الذكية • تحليل النصوص بدقة • ردود فورية • دفعة 2026</footer>
+    <footer>🗨️ كل الرسائل تظهر لكل الطالبات • معلمة الأزهر الذكية • دفعة 2026</footer>
 </div>
 
 <script>
+    // -------------------- إعدادات Firebase --------------------
+    // ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️
+    // استبدلي هذه البيانات بالبيانات اللي ظهرت لك من Firebase Console
+    // ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️ ⚠️
+    
+    const firebaseConfig = {
+    apiKey: "AIzaSyCYTh0WYi7oUNxDigKMUAqspkp-zoW5ZKE",
+    authDomain: "azhar-chat-eb7ac.firebaseapp.com",
+    projectId: "azhar-chat-eb7ac",
+    storageBucket: "azhar-chat-eb7ac.firebasestorage.app",
+    messagingSenderId: "334039512079",
+    appId: "1:334039512079:web:303e3dec130127d5035f7a"
+};
+    
+    // تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
     // -------------------- إعدادات API - Groq --------------------
     const GROQ_API_KEY = "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";
     const GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
     const MODEL_NAME = "llama-3.3-70b-versatile";
     
-    let messages = [];
+    // متغيرات
+    let currentUserId = localStorage.getItem('userId');
+    if (!currentUserId) {
+        currentUserId = 'user_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('userId', currentUserId);
+    }
     
     const chatContainer = document.getElementById('chatMessages');
     const messageInput = document.getElementById('messageInput');
     const sendBtn = document.getElementById('sendBtn');
     const aiRespondBtn = document.getElementById('aiRespondBtn');
     const statusDiv = document.getElementById('statusMsg');
+    
+    // تنظيف النص
+    function cleanText(text) {
+        if (!text) return '';
+        text = text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uac00-\ud7af\u3040-\u30ff]/g, '');
+        text = text.replace(/【.*?】/g, '');
+        text = text.replace(/\[.*?\]/g, '');
+        return text.trim();
+    }
     
     function escapeHtml(str) {
         if (!str) return '';
@@ -341,8 +339,8 @@
         });
     }
     
-    function addMessageToUI(senderName, text, isOwn = false, isTutor = false) {
-        const timestamp = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' });
+    // عرض رسالة في الواجهة
+    function displayMessage(senderName, text, isOwn, isTutor, timestamp) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message');
         if (isOwn) messageDiv.classList.add('own-message');
@@ -351,7 +349,7 @@
         let avatarText = "👩‍🎓";
         if (isTutor) avatarText = "🧑‍🏫";
         else if (isOwn) avatarText = "👧";
-        else avatarText = "💬";
+        else avatarText = "👩‍🎓";
         
         const avatarSpan = document.createElement('div');
         avatarSpan.className = 'message-avatar';
@@ -362,7 +360,7 @@
         
         const metaDiv = document.createElement('div');
         metaDiv.className = 'message-meta';
-        metaDiv.innerHTML = `<span>${escapeHtml(senderName)}</span><span>${timestamp}</span>`;
+        metaDiv.innerHTML = `<span>${escapeHtml(senderName)}</span><span>${timestamp || new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' })}</span>`;
         
         const textDiv = document.createElement('div');
         textDiv.className = 'message-text';
@@ -375,8 +373,22 @@
         
         chatContainer.appendChild(messageDiv);
         chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
-        
-        messages.push({ senderName, text, timestamp, isOwn, isTutor });
+    }
+    
+    // تحميل الرسائل من Firebase (في الوقت الفعلي)
+    function loadMessagesRealtime() {
+        db.collection('messages')
+            .orderBy('timestamp', 'asc')
+            .onSnapshot((snapshot) => {
+                // مسح الشات الحالي
+                chatContainer.innerHTML = '';
+                // إعادة عرض كل الرسائل
+                snapshot.forEach((doc) => {
+                    const msg = doc.data();
+                    const isOwn = (msg.userId === currentUserId);
+                    displayMessage(msg.senderName, msg.text, isOwn, msg.isTutor || false, msg.timeStr);
+                });
+            });
     }
     
     function setStatus(msg, isLoading = false) {
@@ -387,49 +399,58 @@
         }
     }
     
+    // إرسال رسالة عادية إلى Firebase
     async function sendUserMessage() {
         let text = messageInput.value.trim();
         if (!text) {
-            setStatus("⚠️ الرجاء كتابة سؤال أو رسالة", false);
+            setStatus("⚠️ اكتبي سؤال أو حاجة تحبي تسأليها", false);
             setTimeout(() => setStatus("✨ جاهزة للرد", false), 1500);
             return;
         }
         
-        addMessageToUI("أنتِ (الطالبة)", text, true, false);
-        messageInput.value = '';
-        setStatus("", false);
+        setStatus("جاري الإرسال...", true);
+        
+        try {
+            await db.collection('messages').add({
+                userId: currentUserId,
+                senderName: "طالبة",
+                text: text,
+                isTutor: false,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                timeStr: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' })
+            });
+            messageInput.value = '';
+            setStatus("✨ تم الإرسال", false);
+            setTimeout(() => setStatus("✨ جاهزة للرد", false), 1500);
+        } catch (error) {
+            console.error(error);
+            setStatus("⚠️ فشل الإرسال، تأكدي من النت", false);
+        }
     }
     
+    // رد الذكاء الاصطناعي (يتم إضافته كرسالة عادية في Firebase)
     async function aiTutorRespondToLastUser() {
-        let lastUserMsg = null;
-        for (let i = messages.length - 1; i >= 0; i--) {
-            if (!messages[i].isTutor && messages[i].senderName !== "نظام الدردشة") {
-                lastUserMsg = messages[i];
-                break;
-            }
-        }
+        setStatus("📚 الأستاذة بتفكر...", true);
         
-        if (!lastUserMsg) {
-            setStatus("⚠️ لا توجد رسالة من الطالبة للرد عليها. اكتبي سؤالك أولاً.", false);
+        // نجيب آخر رسالة من أي مستخدم (غير الأستاذة)
+        const snapshot = await db.collection('messages')
+            .where('isTutor', '==', false)
+            .orderBy('timestamp', 'desc')
+            .limit(1)
+            .get();
+        
+        if (snapshot.empty) {
+            setStatus("⚠️ يابنتي اكتبي سؤالك الأول عشان أرد عليكِ", false);
             setTimeout(() => setStatus("✨ جاهزة", false), 2000);
             return;
         }
         
-        const userQuestion = lastUserMsg.text;
-        setStatus("📚 الأستاذة تدرس سؤالك بعمق...", true);
+        const lastMsg = snapshot.docs[0].data();
+        const userQuestion = lastMsg.text;
         
-        const systemPrompt = `أنت أستاذة خصوصية متخصصة لطالبات الصف الثاني الثانوي الأزهري (دفعة 2026).
-مهمتك: الرد على أسئلة الطالبات في جميع مواد المنهج الأزهري الرسمي:
-- التفسير، الحديث، التوحيد، الفقه، النحو والصرف، البلاغة، الأدب، التاريخ الإسلامي، الجغرافيا.
-- الرياضيات (الجبر، الهندسة، التفاضل والتكامل)، العلوم (كيمياء، فيزياء، أحياء)، اللغة الإنجليزية.
-متطلبات الرد الاحترافية:
-- دقيق جداً، علمي، ومبسط يناسب مستوى الثانية ثانوي الأزهري.
-- احترافي، مهذب، ومشجع مع استخدام ضمير المؤنث (يا بنات، أختي، أنتن).
-- قدم أمثلة وتوضيحات مستندة إلى الكتاب المدرسي الأزهري المعتمد.
-- إذا كان السؤال خارج المنهج، وجهي الطالبة بلطف نحو الأولويات الدراسية.
-- اجعلي الرد غنياً ووافياً (بين 80 و 350 كلمة حسب السؤال).
-- استخدمي رموزاً تعليمية مثل 📖🧪🧮✨🔬 عند الاقتضاء.
-- ابدأي الرد بتحية قصيرة مثل "وعليكم السلام ورحمة الله وبركاته، يا بنات..."`;
+        const systemPrompt = `أنت أستاذة خصوصية مصرية لطالبات الصف الثاني الثانوي الأزهري (دفعة 2026). اسمك "أستاذة نور".
+أسلوبك باللهجة المصرية اللطيفة. لو الطالبة سألت سؤال زي "عامله ايه" تردي بلطف.
+ماتفتحيش كل رد بتحية. ماتستخدميش كلمات صينية. خلي ردودك طبيعية مصرية ومفيدة.`;
         
         try {
             const response = await fetch(GROQ_ENDPOINT, {
@@ -442,37 +463,51 @@
                     model: MODEL_NAME,
                     messages: [
                         { role: "system", content: systemPrompt },
-                        { role: "user", content: `سؤال الطالبة: ${userQuestion}` }
+                        { role: "user", content: userQuestion }
                     ],
-                    temperature: 0.7,
-                    max_tokens: 1200
+                    temperature: 0.8,
+                    max_tokens: 1000
                 })
             });
             
-            if (!response.ok) {
-                const errorData = await response.json();
-                let errorMsg = `خطأ ${response.status}`;
-                if (errorData.error && errorData.error.message) errorMsg = errorData.error.message;
-                throw new Error(errorMsg);
-            }
+            if (!response.ok) throw new Error("API error");
             
             const data = await response.json();
             let aiReply = data.choices?.[0]?.message?.content;
-            if (!aiReply) throw new Error("لم أتلق رداً من المعلمة");
+            if (!aiReply) throw new Error("No reply");
             
-            aiReply = aiReply.replace(/【.*?】/g, '');
-            addMessageToUI("أستاذة الأزهر - AI Tutor", aiReply, false, true);
-            setStatus("✅ تم الرد بواسطة المعلمة الذكية", false);
-            setTimeout(() => setStatus("✨ جاهزة لسؤال جديد", false), 3000);
+            aiReply = cleanText(aiReply);
+            aiReply = aiReply.replace(/وعليكم السلام ورحمة الله وبركاته/gi, '');
+            aiReply = aiReply.replace(/السلام عليكم/gi, '');
+            
+            // حفظ رد الأستاذة في Firebase (تظهر للكل)
+            await db.collection('messages').add({
+                userId: 'tutor_bot',
+                senderName: "أستاذة نور",
+                text: aiReply,
+                isTutor: true,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                timeStr: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' })
+            });
+            
+            setStatus("✅ تم الرد", false);
+            setTimeout(() => setStatus("✨ اسألي تاني لو حابة", false), 3000);
             
         } catch (error) {
-            console.error("AI error:", error);
-            setStatus(`⚠️ عذراً، حدث خطأ: ${error.message.substring(0, 100)}`, false);
-            addMessageToUI("أستاذة الأزهر - AI Tutor", `عذراً عزيزتي الطالبة، حدث خطأ تقني: ${error.message.substring(0, 150)}. يرجى التحقق من اتصال الإنترنت أو المحاولة مرة أخرى. أنا هنا لمساعدتك دائماً يا دفعة 2026 🌸`, false, true);
-            setTimeout(() => setStatus("✨ جاهزة", false), 5000);
+            console.error(error);
+            setStatus("⚠️ فيه مشكلة في النت، حاولي تاني", false);
+            await db.collection('messages').add({
+                userId: 'tutor_bot',
+                senderName: "أستاذة نور",
+                text: "آسفة يا قمر، فيه مشكلة تقنية بسيطة. جربي تاني كده 🌸",
+                isTutor: true,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                timeStr: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute:'2-digit' })
+            });
         }
     }
     
+    // تشغيل التطبيق
     sendBtn.addEventListener('click', sendUserMessage);
     aiRespondBtn.addEventListener('click', aiTutorRespondToLastUser);
     
@@ -483,10 +518,9 @@
         }
     });
     
-    window.addEventListener('load', () => {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-        setStatus("✨ مرحباً يا أزهريات 2026، اسأليني أي شيء في المنهج", false);
-    });
+    // بدء الاستماع للرسائل
+    loadMessagesRealtime();
+    setStatus("✨ مرحباً يا أزهريات 2026", false);
 </script>
 </body>
-</html>
+    </html>
