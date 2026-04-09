@@ -516,17 +516,18 @@
 
 <script>
     // ==================== إعدادات API ====================
-    // المفتاح هيتم جلبه بأمان من الخلفية (Netlify Function)
+    // المفتاح هيتم جلبه بأمان من Cloudflare Worker
     let API_KEY = "";
     
     const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
     
     const SYSTEM_PROMPT = `أنت معلم خصوصي لطالبات الصف الثاني الثانوي الأزهري. تتحدث بالعامية المصرية بشكل طبيعي ولطيف. دورك: شرح المواد (فيزياء، عربي، دين، إنجليزي، كيمياء، أحياء) بأسلوب بسيط. تحب الطالبات وتساعدهن في المذاكرة. ترد بشكل عفوي وطبيعي. إذا أرسلت الطالبة صورة، قم بتحليل محتواها وشرحه. استخدم رموز تعبيرية بسيطة. لا تخرج عن كونك معلم متخصص في المنهج الأزهري.`;
     
-    // ==================== جلب المفتاح بأمان من الخلفية ====================
+    // ==================== جلب المفتاح بأمان من Cloudflare Worker ====================
     async function fetchApiKey() {
         try {
-            const response = await fetch('/.netlify/functions/get-key');
+            // تم تحديث الرابط إلى Cloudflare Worker الخاص بك
+            const response = await fetch('https://workeroriginal.ameenmohmd124.workers.dev/');
             
             if (!response.ok) {
                 throw new Error('فشل في جلب مفتاح API');
