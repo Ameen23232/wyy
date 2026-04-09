@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>A&M Nebula | AI Chat - Al-Azhar Secondary</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A&M Nebula | شات عام + AI - منصة الدراسة الجماعية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -14,19 +14,6 @@
             font-family: 'Cairo', sans-serif;
         }
 
-        *:focus, *:focus-visible, *:active {
-            outline: none !important;
-            box-shadow: none !important;
-        }
-
-        button:focus, button:focus-visible, 
-        input:focus, input:focus-visible,
-        textarea:focus, textarea:focus-visible,
-        .icon-btn:focus, .send-btn:focus {
-            outline: none !important;
-            box-shadow: none !important;
-        }
-
         body {
             min-height: 100vh;
             background: radial-gradient(circle at 10% 20%, #0a0f1e, #03050b);
@@ -34,811 +21,798 @@
             justify-content: center;
             align-items: center;
             padding: 12px;
-            position: relative;
         }
 
-        .stars {
+        /* شاشة الدخول */
+        .login-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .stars::after {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            box-shadow: 20vw 10vh 2px #fff, 45vw 80vh 2px #f8f9fc, 70vw 30vh 2px #ffe9c7,
-                        12vw 90vh 2px #fff, 85vw 15vh 2px #ffe0b5, 33vw 55vh 2px #fff,
-                        92vw 88vh 2px #fdfdfd, 5vw 45vh 2px #fff, 60vw 70vh 2px #ffefd0,
-                        47vw 20vh 2px #ffffff, 77vw 92vh 2px #fff, 3vw 62vh 2px #fff,
-                        28vw 38vh 2px #fffacd, 54vw 12vh 2px #ffffff, 88vw 47vh 2px #fff;
-            animation: starGlow 3s infinite alternate;
-        }
-        @keyframes starGlow {
-            0% { opacity: 0.4; }
-            100% { opacity: 1; text-shadow: 0 0 4px rgba(255,255,200,0.8); }
-        }
-
-        /* Password Overlay */
-        .password-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 40%, #0a1228, #020408);
-            backdrop-filter: blur(25px);
+            background: rgba(5, 15, 30, 0.95);
+            backdrop-filter: blur(20px);
             z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: overlayFadeIn 0.5s ease;
         }
-        @keyframes overlayFadeIn {
-            from { opacity: 0; backdrop-filter: blur(0); }
-            to { opacity: 1; backdrop-filter: blur(25px); }
-        }
-        
-        .password-card {
-            background: rgba(5, 15, 30, 0.85);
-            border-radius: 56px;
-            padding: 48px 32px;
+
+        .login-card {
+            background: rgba(5, 15, 30, 0.9);
+            border-radius: 48px;
+            padding: 40px 32px;
             width: 90%;
             max-width: 420px;
-            border: 1.5px solid rgba(0, 255, 200, 0.6);
-            box-shadow: 0 0 60px rgba(0, 180, 255, 0.3), inset 0 0 20px rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.4);
             text-align: center;
-            transform: translateY(0);
-            animation: cardFloat 3s infinite alternate;
         }
-        @keyframes cardFloat {
-            0% { transform: translateY(0); box-shadow: 0 0 40px rgba(0, 180, 255, 0.2); }
-            100% { transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0, 255, 200, 0.4); }
+
+        .avatar-select {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
         }
-        
-        .password-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 24px;
-            background: linear-gradient(135deg, #00d4ff, #0066ff);
+
+        .avatar-option {
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff, #0066ff);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 30px rgba(0, 200, 255, 0.6);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
         }
-        .password-icon i {
-            font-size: 2.8rem;
+
+        .avatar-option.selected {
+            border-color: #ffd700;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px gold;
+        }
+
+        .avatar-option i {
+            font-size: 1.6rem;
             color: white;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
         }
-        
-        .password-card h2 {
-            color: #c0ffff;
-            margin-bottom: 12px;
-            font-size: 2rem;
-            font-weight: 700;
-            text-shadow: 0 0 20px #00aaff;
-            letter-spacing: 1px;
-        }
-        
-        .password-card .subtitle {
-            color: #9cb8ff;
-            margin-bottom: 28px;
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-        
-        .input-group {
-            position: relative;
-            margin-bottom: 24px;
-        }
-        
-        .password-input {
+
+        .username-input {
             width: 100%;
-            padding: 16px 48px 16px 20px;
+            padding: 14px 20px;
             border-radius: 60px;
             background: rgba(0, 0, 0, 0.5);
             border: 2px solid rgba(0, 255, 255, 0.4);
-            color: #e0f0ff;
-            font-size: 1.1rem;
+            color: white;
+            font-size: 1rem;
             text-align: center;
-            letter-spacing: 4px;
-            transition: all 0.3s;
-            font-weight: 500;
+            margin: 15px 0;
         }
-        .password-input:focus {
+        
+        /* --- حقل إدخال الـ API Key الجديد (آمن) --- */
+        .api-key-input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 60px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 100, 100, 0.6);
+            color: #ffaa66;
+            font-size: 0.8rem;
+            text-align: center;
+            margin: 10px 0;
+            direction: ltr;
+        }
+        .api-key-input:focus {
             border-color: #0ff;
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
-            background: rgba(0, 0, 0, 0.7);
+            outline: none;
         }
-        .password-input::placeholder {
-            color: #4a6a8a;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
+        .api-note {
+            font-size: 0.65rem;
+            color: #8ab3ff;
+            margin-bottom: 10px;
         }
-        
-        .input-group i {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #0ff;
-            font-size: 1.2rem;
-            opacity: 0.7;
-        }
-        
-        .password-btn {
-            margin-top: 8px;
+        /* ----------------------------- */
+
+        .login-btn {
             background: linear-gradient(145deg, #00c9b0, #0077ee);
             border: none;
-            padding: 16px 28px;
+            padding: 14px 28px;
             border-radius: 60px;
             color: white;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            font-size: 1.1rem;
-            transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 8px 20px rgba(0, 100, 200, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .password-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 25px rgba(0, 255, 200, 0.5);
-            background: linear-gradient(145deg, #00e0c0, #0088ff);
-        }
-        .password-btn:active {
-            transform: scale(0.98);
-        }
-        
-        .error-msg {
-            color: #ff8a7a;
-            margin-top: 16px;
-            font-size: 0.9rem;
-            min-height: 24px;
-            font-weight: 500;
-            text-shadow: 0 0 8px rgba(255,0,0,0.3);
-        }
-        
-        .footer-note {
-            margin-top: 24px;
-            color: #6a8ab0;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .footer-note i {
-            color: #0ff;
+            font-size: 1rem;
         }
 
-        /* Main Chat */
+        /* واجهة الشات الرئيسية */
         .chat-container {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 1300px;
-            height: 92vh;
-            background: rgba(8, 12, 25, 0.7);
-            backdrop-filter: blur(14px);
-            border-radius: 40px;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 255, 0.2), 0 0 12px rgba(0, 210, 255, 0.3);
+            max-width: 1400px;
+            height: 94vh;
+            background: rgba(8, 12, 25, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            border: 1px solid rgba(0, 255, 255, 0.2);
         }
+
         .header {
-            padding: 16px 22px;
-            border-bottom: 1px solid rgba(0, 255, 255, 0.25);
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 40px 40px 0 0;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.4);
         }
-        .brand {
+
+        .header-top {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
             gap: 10px;
         }
-        .logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #a0f0ff, #5d9eff, #c084fc);
+
+        .logo h2 {
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #0ff, #6f5eff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        .logo p { font-size: 0.65rem; color: #a0c4ff; }
-        .badge-ai {
-            background: rgba(0, 230, 200, 0.15);
-            border-radius: 60px;
-            padding: 5px 14px;
-            border: 1px solid rgba(0, 255, 200, 0.5);
+
+        .online-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 255, 0, 0.15);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #0f0;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* وضع AI */
+        .ai-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 12px;
+            border-radius: 40px;
+        }
+
+        .ai-toggle span {
             font-size: 0.7rem;
             color: #aaf0ff;
         }
 
+        .toggle-switch {
+            width: 40px;
+            height: 20px;
+            background: #333;
+            border-radius: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #00c9b0;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            transition: 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            left: 21px;
+        }
+
+        /* منطقة الرسائل */
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 18px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            scroll-behavior: smooth;
+            gap: 12px;
         }
-        .chat-messages::-webkit-scrollbar { width: 4px; }
-        .chat-messages::-webkit-scrollbar-track { background: rgba(0, 20, 40, 0.5); border-radius: 10px; }
-        .chat-messages::-webkit-scrollbar-thumb { background: #0ff; border-radius: 10px; }
 
         .message {
             display: flex;
-            flex-direction: column;
-            max-width: 85%;
-            border-radius: 24px;
-            padding: 10px 16px;
-            word-wrap: break-word;
-            animation: fadeSlideUp 0.2s ease;
+            gap: 10px;
+            max-width: 80%;
+            animation: slideIn 0.2s ease;
         }
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(8px); }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .user-message {
+
+        .my-message {
             align-self: flex-end;
-            background: rgba(0, 180, 216, 0.2);
-            border: 1px solid rgba(0, 255, 210, 0.5);
-            border-radius: 24px 24px 6px 24px;
+            flex-direction: row-reverse;
         }
+
+        .other-message {
+            align-self: flex-start;
+        }
+
         .ai-message {
             align-self: flex-start;
-            background: rgba(25, 35, 60, 0.9);
-            border: 1px solid rgba(130, 200, 255, 0.5);
-            border-radius: 24px 24px 24px 6px;
         }
-        .system-message {
-            align-self: center;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 200, 100, 0.4);
-            border-radius: 40px;
-            font-size: 0.7rem;
-            max-width: 95%;
-            text-align: center;
-        }
-        .message-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 5px;
-            font-size: 0.6rem;
-            font-weight: 600;
-        }
-        .user-message .message-header { color: #7effe6; }
-        .ai-message .message-header { color: #b9e2ff; }
-        .message-content {
-            font-size: 0.9rem;
-            line-height: 1.45;
-            color: #f0f3fa;
-        }
-        .message-image {
-            max-width: 180px;
-            max-height: 140px;
-            border-radius: 18px;
-            margin-top: 6px;
-            border: 1px solid cyan;
-            cursor: pointer;
-        }
-        .timestamp {
-            font-size: 0.5rem;
-            opacity: 0.6;
-            margin-top: 5px;
-        }
-        .user-message .timestamp { text-align: right; }
 
-        .input-area {
-            padding: 14px 18px 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border-top: 1px solid rgba(0, 255, 255, 0.2);
-            border-radius: 0 0 40px 40px;
-        }
-        .input-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(12, 18, 32, 0.85);
-            border-radius: 60px;
-            padding: 5px 8px 5px 12px;
-            border: 1px solid rgba(0, 255, 255, 0.4);
-            transition: all 0.2s;
-        }
-        .input-wrapper:focus-within {
-            border-color: #0ff;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-        }
-        .input-wrapper textarea {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #eef5ff;
-            font-size: 0.9rem;
-            resize: none;
-            max-height: 70px;
-            min-height: 42px;
-            padding: 10px 4px;
-            font-family: 'Cairo', sans-serif;
-        }
-        .input-wrapper textarea::placeholder {
-            color: #6c86a8;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .icon-btn {
-            background: none;
-            border: none;
-            color: #8db9ff;
-            font-size: 1.3rem;
-            cursor: pointer;
-            width: 38px;
-            height: 38px;
+        .message-avatar {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff, #0066ff);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.2s;
+            flex-shrink: 0;
         }
-        .icon-btn:active { transform: scale(0.95); }
+
+        .message-avatar i {
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .message-bubble {
+            background: rgba(25, 35, 60, 0.95);
+            border-radius: 18px;
+            padding: 8px 14px;
+            max-width: 100%;
+        }
+
+        .my-message .message-bubble {
+            background: rgba(0, 180, 216, 0.25);
+            border: 1px solid rgba(0, 255, 200, 0.4);
+        }
+
+        .message-name {
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: #7effe6;
+            margin-bottom: 4px;
+        }
+
+        .message-text {
+            font-size: 0.85rem;
+            color: #f0f3fa;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message-time {
+            font-size: 0.5rem;
+            color: #8a9ac0;
+            margin-top: 4px;
+            text-align: left;
+        }
+
+        /* منطقة الإدخال */
+        .input-area {
+            padding: 12px 16px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            background: rgba(12, 18, 32, 0.9);
+            border-radius: 60px;
+            padding: 6px 12px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .message-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 0.85rem;
+            resize: none;
+            min-height: 40px;
+            max-height: 80px;
+            padding: 8px 4px;
+        }
+
         .send-btn {
             background: linear-gradient(145deg, #00b4aa, #0066cc);
             border: none;
             color: white;
-            border-radius: 40px;
-            padding: 8px 18px;
-            font-weight: 600;
-            font-size: 0.8rem;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
             cursor: pointer;
-            white-space: nowrap;
-            transition: 0.2s;
-        }
-        .send-btn:active { transform: scale(0.95); }
-        .preview-tag {
-            margin-top: 8px;
-            font-size: 0.7rem;
-            background: rgba(0,200,200,0.2);
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 40px;
-            color: #8efff0;
-        }
-        @media (max-width: 600px) {
-            body { padding: 6px; }
-            .chat-container { height: 94vh; border-radius: 28px; }
-            .message { max-width: 92%; }
-            .logo h1 { font-size: 1.2rem; }
-            .header { padding: 12px 16px; }
-            .input-area { padding: 10px 14px 16px; }
-            .icon-btn { width: 34px; height: 34px; font-size: 1.1rem; }
-            .send-btn { padding: 6px 14px; font-size: 0.75rem; }
         }
 
-        .error-shake {
-            animation: shake 0.5s;
-            border-color: #ff6b6b !important;
+        .typing-indicator {
+            font-size: 0.6rem;
+            color: #8ab3ff;
+            padding: 4px 12px;
         }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+
+        @media (max-width: 600px) {
+            .message { max-width: 95%; }
+            .message-avatar { width: 35px; height: 35px; }
+            .message-avatar i { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-<div class="stars"></div>
 
-<!-- واجهة كلمة المرور -->
-<div id="passwordOverlay" class="password-overlay">
-    <div class="password-card">
-        <div class="password-icon">
-            <i class="fas fa-shield-hal"></i>
-        </div>
-        <h2>A&M Nebula</h2>
-        <p class="subtitle">بوابة الدخول الآمنة</p>
+<!-- شاشة الدخول -->
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+        <i class="fas fa-users" style="font-size: 2.5rem; color: #0ff;"></i>
+        <h2 style="color: #0ff; margin: 15px 0 5px;">A&M Nebula</h2>
+        <p style="color: #8ab3ff;">شات عام + ذكاء اصطناعي للدراسة</p>
         
-        <div class="input-group">
-            <input type="password" id="passwordInput" class="password-input" placeholder="كلمة المرور" autocomplete="off" dir="ltr">
-            <i class="fas fa-key"></i>
+        <!-- ✅ تمت إضافة حقل إدخال آمن للـ API Key -->
+        <input type="password" id="apiKeyInput" class="api-key-input" placeholder="أدخل مفتاح Groq API (يبدأ بـ gsk_)" dir="ltr">
+        <div class="api-note">⚠️ سيتم استخدام المفتاح في جلسة التصفح الحالية فقط، ولن يتم تخزينه بشكل دائم.</div>
+        
+        <div class="avatar-select" id="avatarSelect">
+            <div class="avatar-option selected" data-avatar="👩‍🎓">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="avatar-option" data-avatar="👩‍🔬">
+                <i class="fas fa-flask"></i>
+            </div>
+            <div class="avatar-option" data-avatar="👩‍💻">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+            <div class="avatar-option" data-avatar="🌟">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="avatar-option" data-avatar="📚">
+                <i class="fas fa-book"></i>
+            </div>
         </div>
         
-        <button id="submitPassword" class="password-btn">
-            <i class="fas fa-arrow-left"></i>
-            دخول إلى المنصة
-            <i class="fas fa-arrow-right"></i>
+        <input type="text" id="usernameInput" class="username-input" placeholder="اسم المستخدم" maxlength="25">
+        
+        <button id="joinBtn" class="login-btn">
+            <i class="fas fa-sign-in-alt"></i> دخول إلى الشات العام
         </button>
         
-        <div id="passError" class="error-msg"></div>
-        
-        <div class="footer-note">
-            <i class="fas fa-lock"></i>
-            <span>بيئة آمنة للطالبات</span>
-            <i class="fas fa-graduation-cap"></i>
-        </div>
+        <div id="loginError" style="color: #ff6b6b; margin-top: 12px; font-size: 0.75rem;"></div>
     </div>
 </div>
 
-<!-- واجهة الشات الرئيسية -->
+<!-- واجهة الشات -->
 <div id="chatApp" class="chat-container" style="display: none;">
     <div class="header">
-        <div class="brand">
+        <div class="header-top">
             <div class="logo">
-                <h1>✨ A&M Nebula ✨</h1>
-                <p>الثانوية الأزهرية للبنات | ذكاء اصطناعي متقدم</p>
+                <h2><i class="fas fa-comments"></i> الشات العام | A&M Nebula</h2>
             </div>
-            <div class="badge-ai">
-                <i class="fas fa-brain"></i> <span id="modelBadge">Gemini 2.0</span>
+            <div class="online-count">
+                <div class="online-dot"></div>
+                <span id="onlineCount">0</span> متصل
+            </div>
+            <div class="ai-toggle">
+                <span><i class="fas fa-robot"></i> AI</span>
+                <div id="aiToggle" class="toggle-switch"></div>
+                <span id="aiStatus" style="font-size: 0.65rem;">إيقاف</span>
             </div>
         </div>
     </div>
 
     <div class="chat-messages" id="chatMessages"></div>
+    
+    <div id="typingIndicator" class="typing-indicator" style="display: none;">
+        <span>شخص يكتب...</span>
+    </div>
 
     <div class="input-area">
         <div class="input-wrapper">
-            <textarea id="messageInput" rows="1" placeholder="اكتب سؤالك بالعامية المصرية أو أرفق صورة..."></textarea>
-            <div class="action-buttons">
-                <label for="imageInput" class="icon-btn" style="cursor:pointer;">
-                    <i class="fas fa-image"></i>
-                </label>
-                <input type="file" id="imageInput" accept="image/*" style="display:none">
-                <button id="aiSendBtn" class="icon-btn" title="AI Magic - تحليل ذكي">
-                    <i class="fas fa-magic"></i>
-                </button>
-                <button id="normalSendBtn" class="send-btn">إرسال</button>
-            </div>
+            <textarea id="messageInput" class="message-input" rows="1" placeholder="اكتب رسالتك... استخدم @AI ليسأل الذكاء الاصطناعي"></textarea>
+            <button id="sendBtn" class="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
         </div>
-        <div id="imagePreview" class="preview-tag" style="display: none;"></div>
     </div>
 </div>
 
 <script>
-    // ==================== إعدادات API ====================
-    // المفتاح هيتم جلبه بأمان من Cloudflare Worker
-    let API_KEY = "";
+    // ==================== إعدادات ====================
+    let currentUser = null;
+    let messages = [];
+    let onlineUsers = new Map(); // اسم المستخدم -> {id, avatar, lastSeen}
+    let isAIActive = false;
+    let GROQ_API_KEY = "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"; // ✅ سيتم تعبئة هذا المتغير من حقل الإدخال
+    let typingTimeout = null;
     
-    const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
+    // معرف فريد للجلسة
+    const sessionId = localStorage.getItem('sessionId') || 'session_' + Date.now() + '_' + Math.random();
+    localStorage.setItem('sessionId', sessionId);
     
-    const SYSTEM_PROMPT = `أنت معلم خصوصي لطالبات الصف الثاني الثانوي الأزهري. تتحدث بالعامية المصرية بشكل طبيعي ولطيف. دورك: شرح المواد (فيزياء، عربي، دين، إنجليزي، كيمياء، أحياء) بأسلوب بسيط. تحب الطالبات وتساعدهن في المذاكرة. ترد بشكل عفوي وطبيعي. إذا أرسلت الطالبة صورة، قم بتحليل محتواها وشرحه. استخدم رموز تعبيرية بسيطة. لا تخرج عن كونك معلم متخصص في المنهج الأزهري.`;
-    
-    // ==================== جلب المفتاح بأمان من Cloudflare Worker ====================
-    async function fetchApiKey() {
-        try {
-            // تم تحديث الرابط إلى Cloudflare Worker الخاص بك
-            const response = await fetch('https://workeroriginal.ameenmohmd124.workers.dev/');
-            
-            if (!response.ok) {
-                throw new Error('فشل في جلب مفتاح API');
-            }
-            
-            const data = await response.json();
-            API_KEY = data.apiKey;
-            
-            if (!API_KEY) {
-                throw new Error('لم يتم استلام مفتاح API');
-            }
-            
-            console.log('✅ تم تحميل مفتاح API بأمان');
-            return true;
-        } catch (error) {
-            console.error('❌ خطأ في تحميل مفتاح API:', error);
-            return false;
-        }
+    // ==================== البرومبت المحسن للمعلم الأزهري ====================
+    function getSystemPrompt() {
+        return `أنت فضيلة الشيخ، معلم أزهري متخصص في تدريس الصف الثاني الثانوي 2026.
+
+الشخصية:
+- تتحدث بالعامية المصرية مع لمسات من الفصحى البسيطة
+- أسلوبك حنون ولطيف ومشجع، مثل الأب الروحي للطالبات
+- تستخدم الإيموجيز المناسبة 😊📚🕌
+
+القواعد المهمة:
+1. أجب فقط بناءً على معلوماتك كمعلم أزهري متخصص في المنهج الأزهري
+2. إذا سُئلت عن شيء خارج المنهج أو لا تعرفه، قل بلطف: "ده مش في منهجنا يا بنتي، لكن ممكن أساعدك في أي سؤال تاني 😊"
+3. شجع الطالبات دائمًا على المذاكرة وحب العلم
+4. استخدم آيات قرآنية وأحاديث نبوية مناسبة عند الشرح
+5. خاطب الطالبة بكلمة "يا بنتي" أو "يا حبيبتي" بحنان
+6. إذا كان السؤال دراسي، اشرحه بطريقة مبسطة مع أمثلة
+7. اجعل إجابتك من 3-5 جمل قصيرة وواضحة
+
+مثال للرد على سؤال دراسي:
+"أهلاً يا حبيبتي 😊، سؤالك جميل جداً. خليني أشرحلك قاعدة الوصايا ببساطة..."
+
+مثال للرد على سؤال خارج المنهج:
+"يا بنتي، ده مش في منهج الصف الثاني الثانوي للأسف 😅، لكن اسأليني في أي حاجة تانية من المنهج وأنا أجاوبك بكل حب 💕"`;
     }
     
-    // ==================== عناصر DOM ====================
-    const passwordOverlay = document.getElementById('passwordOverlay');
-    const chatApp = document.getElementById('chatApp');
-    const chatMessagesDiv = document.getElementById('chatMessages');
-    const messageInput = document.getElementById('messageInput');
-    const imageInput = document.getElementById('imageInput');
-    const imagePreviewDiv = document.getElementById('imagePreview');
-    const aiSendBtn = document.getElementById('aiSendBtn');
-    const normalSendBtn = document.getElementById('normalSendBtn');
-    const passwordInputField = document.getElementById('passwordInput');
-    const submitPasswordBtn = document.getElementById('submitPassword');
-    const passErrorDiv = document.getElementById('passError');
+    // ==================== استدعاء Groq API ====================
+    async function callGroq(question) {
+    try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Authorization': `Bearer ${GROQ_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'llama-4-scout-17b-16e-instruct',
+                messages: [
+                    { role: 'system', content: getSystemPrompt() },
+                    { role: 'user', content: question }
+                ],
+                temperature: 0.7,
+                max_tokens: 1000
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('API Error');
+        }
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+
+    } catch (error) {
+        console.error(error);
+        return "⚠️ حصل خطأ في الاتصال بالذكاء الاصطناعي، حاول تاني 😊";
+    }
+}
+    // ==================== إدارة الرسائل ====================
+    function saveMessages() {
+        // حفظ آخر 200 رسالة فقط
+        const toSave = messages.slice(-200);
+        localStorage.setItem('public_chat_messages', JSON.stringify(toSave));
+    }
     
-    // ==================== المتغيرات ====================
-    const CORRECT_PASSWORD = "2010122";
-    let messageHistory = [];
-    let currentAttachedImage = null;
-    let loadingElement = null;
-    
-    // ==================== دوال الشات ====================
-    function loadChatHistory() {
-        const stored = localStorage.getItem('aandm_real_ai');
+    function loadMessages() {
+        const stored = localStorage.getItem('public_chat_messages');
         if (stored) {
             try {
-                messageHistory = JSON.parse(stored);
-                renderAllMessages();
-                return;
+                messages = JSON.parse(stored);
+                renderMessages();
             } catch(e) {}
         }
-        messageHistory = [
-            { type: 'system', text: "✨ مرحباً بك في A&M Nebula – تم الاتصال بنموذج الذكاء الاصطناعي الحقيقي. جميع المحادثات محفوظة للجميع.", timestamp: new Date().toISOString(), image: null },
-            { type: 'ai', text: "أهلاً بيكي يا جميلة! 🌙 أنا هنا عشان أساعدك في المذاكرة. أنا متصل بـ Gemini AI فاهم الصور واللغة العربية باحترافية. اسأليني أي حاجة وفي أي مادة، ولو عندك صورة لدرس ارفعيها وهحللها فوراً. شدي حيلك يا بطلة الأزهر 💪✨", timestamp: new Date().toISOString(), image: null }
-        ];
-        saveChatHistory();
-        renderAllMessages();
     }
     
-    function saveChatHistory() {
-        localStorage.setItem('aandm_real_ai', JSON.stringify(messageHistory));
-    }
-    
-    function renderAllMessages() {
-        if (!chatMessagesDiv) return;
-        chatMessagesDiv.innerHTML = '';
-        messageHistory.forEach(msg => {
-            chatMessagesDiv.appendChild(createMessageElement(msg));
+    function renderMessages() {
+        const container = document.getElementById('chatMessages');
+        if (!container) return;
+        container.innerHTML = '';
+        messages.forEach(msg => {
+            container.appendChild(createMessageElement(msg));
         });
         scrollToBottom();
     }
     
     function createMessageElement(msg) {
         const div = document.createElement('div');
-        div.classList.add('message');
-        if (msg.type === 'user') div.classList.add('user-message');
-        else if (msg.type === 'ai') div.classList.add('ai-message');
-        else div.classList.add('system-message');
+        const isMyMessage = currentUser && msg.userId === currentUser.id;
         
-        const header = document.createElement('div');
-        header.classList.add('message-header');
-        let timeStr = new Date(msg.timestamp).toLocaleTimeString('ar-EG', { hour:'2-digit', minute:'2-digit' });
-        if (msg.type === 'user') header.innerHTML = `<i class="fas fa-user"></i> أنت · ${timeStr}`;
-        else if (msg.type === 'ai') header.innerHTML = `<i class="fas fa-robot"></i> A&M AI (Gemini) · ${timeStr}`;
-        else header.innerHTML = `<i class="fas fa-info-circle"></i> النظام · ${timeStr}`;
-        
-        const content = document.createElement('div');
-        content.classList.add('message-content');
-        content.innerText = msg.text;
-        
-        div.appendChild(header);
-        div.appendChild(content);
-        if (msg.image && msg.type === 'user') {
-            const img = document.createElement('img');
-            img.src = msg.image;
-            img.classList.add('message-image');
-            div.appendChild(img);
+        if (msg.type === 'ai') {
+            div.className = 'message ai-message';
+        } else {
+            div.className = `message ${isMyMessage ? 'my-message' : 'other-message'}`;
         }
-        const stamp = document.createElement('div');
-        stamp.classList.add('timestamp');
-        stamp.innerText = timeStr;
-        div.appendChild(stamp);
+        
+        // الصورة الرمزية
+        const avatar = document.createElement('div');
+        avatar.className = 'message-avatar';
+        const avatarIcon = msg.avatarIcon || 'fas fa-user';
+        const avatarColor = msg.avatarColor || '#00d4ff';
+        avatar.style.background = `linear-gradient(135deg, ${avatarColor}, #0066ff)`;
+        avatar.innerHTML = `<i class="${avatarIcon}"></i>`;
+        
+        // فقاعة الرسالة
+        const bubble = document.createElement('div');
+        bubble.className = 'message-bubble';
+        
+        const nameSpan = document.createElement('div');
+        nameSpan.className = 'message-name';
+        if (msg.type === 'ai') {
+            nameSpan.innerHTML = '<i class="fas fa-robot"></i> الذكاء الاصطناعي';
+        } else {
+            nameSpan.textContent = msg.username;
+        }
+        
+        const textSpan = document.createElement('div');
+        textSpan.className = 'message-text';
+        textSpan.innerHTML = msg.text.replace(/\n/g, '<br>');
+        
+        const timeSpan = document.createElement('div');
+        timeSpan.className = 'message-time';
+        timeSpan.textContent = new Date(msg.timestamp).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        
+        bubble.appendChild(nameSpan);
+        bubble.appendChild(textSpan);
+        bubble.appendChild(timeSpan);
+        
+        div.appendChild(avatar);
+        div.appendChild(bubble);
+        
         return div;
     }
     
-    function appendMessage(type, text, imageBase64 = null) {
-        const newMsg = { type, text, image: imageBase64 || null, timestamp: new Date().toISOString() };
-        messageHistory.push(newMsg);
-        saveChatHistory();
-        if (chatMessagesDiv) {
-            chatMessagesDiv.appendChild(createMessageElement(newMsg));
-            scrollToBottom();
-        }
-        return newMsg;
+    function addMessage(type, username, text, userId, avatarIcon, avatarColor, isAI = false) {
+        const msg = {
+            id: Date.now() + '_' + Math.random(),
+            type: isAI ? 'ai' : 'user',
+            username: username,
+            text: text,
+            userId: userId,
+            avatarIcon: avatarIcon,
+            avatarColor: avatarColor,
+            timestamp: new Date().toISOString()
+        };
+        messages.push(msg);
+        saveMessages();
+        renderMessages();
+        return msg;
     }
     
+    async function sendUserMessage(text) {
+        if (!text.trim()) return;
+        
+        // إضافة رسالة المستخدم
+        addMessage('user', currentUser.name, text, currentUser.id, currentUser.avatarIcon, currentUser.avatarColor);
+        
+        // التحقق إذا كانت الرسالة موجهة للـ AI
+        const isMentioningAI = text.includes('@AI') || text.includes('@ai') || text.toLowerCase().includes('يا شيخ');
+        
+        if (isAIActive || isMentioningAI) {
+            // إظهار مؤشر كتابة AI
+            showTypingIndicator(true);
+            
+            // تنظيف السؤال من @AI
+            let question = text.replace(/@AI/gi, '').replace(/@ai/gi, '').replace(/يا شيخ/gi, '').trim();
+            if (!question) question = text;
+            
+            // الحصول على رد من AI
+            const aiResponse = await callGroq(question);
+            
+            showTypingIndicator(false);
+            
+            // إضافة رد AI
+            addMessage('ai', 'AI', aiResponse, 'ai_system', 'fas fa-robot', '#ff6b6b', true);
+        }
+    }
+    
+    // ==================== إدارة المستخدمين المتصلين ====================
+    function updateOnlineUsers() {
+        // تحديث وقت آخر ظهور للمستخدم الحالي
+        onlineUsers.set(currentUser.id, {
+            name: currentUser.name,
+            avatarIcon: currentUser.avatarIcon,
+            lastSeen: Date.now()
+        });
+        
+        // حذف المستخدمين غير النشطين (آخر ظهور من 5 دقائق)
+        const now = Date.now();
+        for (const [id, data] of onlineUsers.entries()) {
+            if (now - data.lastSeen > 300000) { // 5 دقائق
+                onlineUsers.delete(id);
+            }
+        }
+        
+        document.getElementById('onlineCount').innerText = onlineUsers.size;
+    }
+    
+    function broadcastPresence() {
+        updateOnlineUsers();
+        // حفظ المستخدمين في localStorage للمستخدمين الآخرين
+        const usersArray = Array.from(onlineUsers.entries()).map(([id, data]) => ({
+            id, name: data.name, avatarIcon: data.avatarIcon, lastSeen: data.lastSeen
+        }));
+        localStorage.setItem('online_users', JSON.stringify(usersArray));
+    }
+    
+    function loadOnlineUsers() {
+        const stored = localStorage.getItem('online_users');
+        if (stored) {
+            try {
+                const usersArray = JSON.parse(stored);
+                onlineUsers.clear();
+                usersArray.forEach(u => {
+                    if (u.id !== currentUser?.id) {
+                        onlineUsers.set(u.id, u);
+                    }
+                });
+                document.getElementById('onlineCount').innerText = onlineUsers.size + 1;
+            } catch(e) {}
+        }
+    }
+    
+    // ==================== مؤشر الكتابة ====================
+    function showTypingIndicator(show) {
+        const indicator = document.getElementById('typingIndicator');
+        if (show) {
+            indicator.style.display = 'block';
+            indicator.innerHTML = '<span><i class="fas fa-spinner fa-pulse"></i> AI يكتب...</span>';
+        } else {
+            indicator.style.display = 'none';
+        }
+    }
+    
+    // ==================== وظائف مساعدة ====================
     function scrollToBottom() {
-        if (chatMessagesDiv) chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+        const container = document.getElementById('chatMessages');
+        if (container) container.scrollTop = container.scrollHeight;
     }
     
-    function showLoading() {
-        if (loadingElement) loadingElement.remove();
-        const loadingDiv = document.createElement('div');
-        loadingDiv.classList.add('message', 'ai-message');
-        loadingDiv.id = 'ai-loading';
-        loadingDiv.innerHTML = `<div class="message-header"><i class="fas fa-spinner fa-pulse"></i> A&M AI بتفكر...</div><div class="message-content">🤖 بقرأ سؤالك و بشوف الصورة... لحظة واحدة</div>`;
-        chatMessagesDiv.appendChild(loadingDiv);
-        scrollToBottom();
-        loadingElement = loadingDiv;
-    }
-    
-    function removeLoading() {
-        if (loadingElement) {
-            loadingElement.remove();
-            loadingElement = null;
-        }
-    }
-    
-    // ==================== استدعاء API ====================
-    async function callGeminiAPI(userText, imageBase64) {
-        if (!API_KEY) {
-            const success = await fetchApiKey();
-            if (!success) {
-                throw new Error("مفتاح API غير متوفر");
-            }
-        }
+    // ==================== الدخول إلى الشات ====================
+    async function joinChat() {
+        // ✅ التحقق من إدخال مفتاح API أولاً
+        const apiKey = document.getElementById('apiKeyInput').value.trim();
+        if (!apiKey || !apiKey.startsWith('gsk_')) {
+        document.getElementById('loginError').innerText = '⚠️ الرجاء إدخال    مفتاح Groq API صحيح (يبدأ بـ gsk_)';
+    return;
+     }
+       GROQ_API_KEY = apiKey;
         
-        const contents = [];
-        let userPrompt = userText || "حلل هذه الصورة واشرح محتواها الدراسي";
-        
-        const parts = [{ text: userPrompt }];
-        
-        if (imageBase64) {
-            const base64Data = imageBase64.split(',')[1];
-            const mimeType = imageBase64.match(/data:(image\/\w+);/)?.[1] || "image/jpeg";
-            parts.push({
-                inlineData: {
-                    mimeType: mimeType,
-                    data: base64Data
-                }
-            });
-        }
-        
-        contents.push({
-            role: "user",
-            parts: parts
-        });
-        
-        const requestBody = {
-            contents: contents,
-            systemInstruction: {
-                parts: [{ text: SYSTEM_PROMPT }]
-            },
-            generationConfig: {
-                temperature: 0.7,
-                topP: 0.95,
-                maxOutputTokens: 2048
-            }
-        };
-        
-        const response = await fetch(`${API_URL}?key=${API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody)
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.text();
-            throw new Error(`API Error: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!aiText) throw new Error("لم استقبل رد من الذكاء الاصطناعي");
-        return aiText;
-    }
-    
-    async function sendWithAIMagic() {
-        const textMsg = messageInput.value.trim();
-        if (!textMsg && !currentAttachedImage) {
-            appendMessage('system', "⚠️ من فضلك اكتب رسالة أو ارفع صورة قبل استخدام زر السحر ✨");
+        const username = document.getElementById('usernameInput').value.trim();
+        if (!username) {
+            document.getElementById('loginError').innerText = '⚠️ الرجاء إدخال اسم المستخدم';
             return;
         }
         
-        const userFinalText = textMsg || "📎 طلب تحليل الصورة";
-        const attachedImgCopy = currentAttachedImage;
+        const selectedAvatar = document.querySelector('.avatar-option.selected');
+        let avatarIcon = 'fas fa-user-graduate';
+        let avatarColor = '#00d4ff';
         
-        appendMessage('user', userFinalText, attachedImgCopy);
-        
-        messageInput.value = '';
-        currentAttachedImage = null;
-        imageInput.value = '';
-        imagePreviewDiv.style.display = 'none';
-        imagePreviewDiv.innerHTML = '';
-        
-        showLoading();
-        
-        try {
-            const aiResponse = await callGeminiAPI(userFinalText, attachedImgCopy);
-            removeLoading();
-            appendMessage('ai', aiResponse);
-        } catch (error) {
-            removeLoading();
-            console.error("API Error:", error);
-            appendMessage('system', `❌ خطأ: ${error.message}. تأكد من اتصال الإنترنت ومفتاح API.`);
+        if (selectedAvatar) {
+            const avatarData = selectedAvatar.getAttribute('data-avatar');
+            switch(avatarData) {
+                case '👩‍🎓': avatarIcon = 'fas fa-user-graduate'; avatarColor = '#ff6b6b'; break;
+                case '👩‍🔬': avatarIcon = 'fas fa-flask'; avatarColor = '#4ecdc4'; break;
+                case '👩‍💻': avatarIcon = 'fas fa-laptop-code'; avatarColor = '#45b7d1'; break;
+                case '🌟': avatarIcon = 'fas fa-star'; avatarColor = '#f9ca24'; break;
+                case '📚': avatarIcon = 'fas fa-book'; avatarColor = '#c44569'; break;
+            }
         }
-    }
-    
-    function sendNormalMessage() {
-        const textMsg = messageInput.value.trim();
-        if (!textMsg && !currentAttachedImage) return;
         
-        appendMessage('user', textMsg || "📎 مرفق صورة", currentAttachedImage);
-        
-        messageInput.value = '';
-        currentAttachedImage = null;
-        imageInput.value = '';
-        imagePreviewDiv.style.display = 'none';
-        imagePreviewDiv.innerHTML = '';
-        
-        appendMessage('ai', "📢 تم استلام رسالتك! عشان تحصل على رد من الذكاء الاصطناعي الحقيقي (Gemini AI) اضغط على زر السحر ✨. أنا هنا اساعدك في المذاكرة!");
-    }
-    
-    // ==================== مستمعي الأحداث ====================
-    imageInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) {
-            currentAttachedImage = null;
-            imagePreviewDiv.style.display = 'none';
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            currentAttachedImage = ev.target.result;
-            imagePreviewDiv.style.display = 'inline-block';
-            imagePreviewDiv.innerHTML = `<i class="fas fa-paperclip"></i> الصورة جاهزة · ${file.name.substring(0, 18)} <i class="fas fa-times-circle" id="clearImageBtn" style="margin-left: 8px; cursor:pointer;"></i>`;
-            const clearBtn = document.getElementById('clearImageBtn');
-            if (clearBtn) clearBtn.onclick = () => {
-                currentAttachedImage = null;
-                imageInput.value = '';
-                imagePreviewDiv.style.display = 'none';
-            };
+        currentUser = {
+            id: sessionId,
+            name: username,
+            avatarIcon: avatarIcon,
+            avatarColor: avatarColor
         };
-        reader.readAsDataURL(file);
+        
+        // إخفاء شاشة الدخول
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('chatApp').style.display = 'flex';
+        
+        // تحميل الرسائل السابقة
+        loadMessages();
+        loadOnlineUsers();
+        
+        // إضافة رسالة ترحيب من AI
+        setTimeout(async () => {
+            const welcomeMessage = await callGroq(`أكتب رسالة ترحيب لطالبة جديدة في منصة الدراسة اسمها ${username}، قولها إنها في قناة فضيلة الشيخ، وشجعها على المذاكرة. اجعل الرسالة قصيرة وحلوة ومليانة إيموجيز`);
+            addMessage('ai', 'AI', welcomeMessage, 'ai_system', 'fas fa-robot', '#ff6b6b', true);
+        }, 500);
+        
+        // تحديث الحضور كل 30 ثانية
+        updateOnlineUsers();
+        setInterval(() => {
+            if (currentUser) {
+                updateOnlineUsers();
+                broadcastPresence();
+            }
+        }, 30000);
+        
+        loadOnlineUsers();
+    }
+    
+    // ==================== تبديل وضع AI ====================
+    async function toggleAI() {
+        isAIActive = !isAIActive;
+        const toggle = document.getElementById('aiToggle');
+        const status = document.getElementById('aiStatus');
+        if (isAIActive) {
+            toggle.classList.add('active');
+            status.textContent = 'شغال';
+            status.style.color = '#0ff';
+            const message = await callGroq('اكتب رسالة قصيرة تقول فيها إن تم تفعيل الوضع التلقائي، وكل أسئلة الطالبة هتتوجه لفضيلة الشيخ مباشرة، قولها كمان إنها تقدر تستخدم @AI عشان تسأل حاجة معينة');
+            addMessage('ai', 'AI', message, 'ai_system', 'fas fa-robot', '#ff6b6b', true);
+        } else {
+            toggle.classList.remove('active');
+            status.textContent = 'إيقاف';
+            status.style.color = '#aaa';
+            const message = await callGroq('اكتب رسالة قصيرة تقول فيها إن تم إيقاف الوضع التلقائي، وإن الطالبة تقدر تستخدم @AI قبل سؤالها عشان تطلب المساعدة من فضيلة الشيخ');
+            addMessage('ai', 'AI', message, 'ai_system', 'fas fa-robot', '#ff6b6b', true);
+        }
+    }
+    
+    // ==================== الأحداث ====================
+    document.getElementById('joinBtn')?.addEventListener('click', joinChat);
+    document.getElementById('sendBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('messageInput');
+        if (input.value.trim()) {
+            sendUserMessage(input.value);
+            input.value = '';
+            input.style.height = 'auto';
+        }
     });
     
-    aiSendBtn.addEventListener('click', sendWithAIMagic);
-    normalSendBtn.addEventListener('click', sendNormalMessage);
-    
-    messageInput.addEventListener('keydown', (e) => {
+    document.getElementById('messageInput')?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            normalSendBtn.click();
+            document.getElementById('sendBtn').click();
         }
     });
     
-    messageInput.addEventListener('input', function() {
+    document.getElementById('aiToggle')?.addEventListener('click', toggleAI);
+    
+    // اختيار الصورة الرمزية
+    document.querySelectorAll('.avatar-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+        });
+    });
+    
+    // Auto-resize textarea
+    document.getElementById('messageInput')?.addEventListener('input', function() {
         this.style.height = 'auto';
         this.style.height = Math.min(this.scrollHeight, 80) + 'px';
-    });
-    
-    // ==================== المصادقة ====================
-    async function authenticate(password) {
-        if (password === CORRECT_PASSWORD) {
-            const keyLoaded = await fetchApiKey();
-            if (keyLoaded) {
-                passwordOverlay.style.display = 'none';
-                chatApp.style.display = 'flex';
-                loadChatHistory();
-            } else {
-                passErrorDiv.innerText = "❌ خطأ في تحميل النظام. حاول مرة أخرى.";
-            }
-        } else {
-            passErrorDiv.innerText = "❌ كلمة المرور غير صحيحة";
-            passwordInputField.value = '';
-            passwordInputField.classList.add('error-shake');
-            setTimeout(() => passwordInputField.classList.remove('error-shake'), 500);
-        }
-    }
-    
-    submitPasswordBtn.addEventListener('click', () => {
-        authenticate(passwordInputField.value);
-    });
-    
-    passwordInputField.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            authenticate(passwordInputField.value);
-        }
-    });
-    
-    window.addEventListener('load', () => {
-        passwordOverlay.style.display = 'flex';
-        chatApp.style.display = 'none';
     });
 </script>
 </body>
