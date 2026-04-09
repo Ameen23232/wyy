@@ -235,11 +235,12 @@
 
 <script>
     // -------------------- إعدادات API (محدثة) --------------------
-    const GROQ_API_KEY = "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";
-    const GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
-    
-    // استخدام نموذج نصي مدعوم ومستقر (بدون رؤية)
-    const MODEL_NAME = "mixtral-8x7b-32768";  // نموذج قوي ومحدث ومجاني
+    // -------------------- إعدادات API باستخدام OpenRouter --------------------
+const OPENROUTER_API_KEY = "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";
+const OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
+
+// نموذج قوي ومتخصص للإجابات التعليمية (DeepSeek عبر OpenRouter)
+const MODEL_NAME = "deepseek/deepseek-r1:free";  // نموذج قوي ومحدث ومجاني
     
     let messages = [];  // تخزين الرسائل للعرض فقط، لا نرسلها للAPI
     
@@ -321,6 +322,7 @@
     }
     
     // دالة استدعاء الذكاء الاصطناعي (معلمة الأزهر)
+        // دالة استدعاء الذكاء الاصطناعي (معلمة الأزهر) عبر OpenRouter
     async function aiTutorRespondToLastUser() {
         // البحث عن آخر رسالة ليست من المعلمة
         let lastUserMsg = null;
@@ -355,10 +357,10 @@
 - ابدأي الرد بتحية قصيرة مثل "وعليكم السلام ورحمة الله، يا بنات..."`;
         
         try {
-            const response = await fetch(GROQ_ENDPOINT, {
+            const response = await fetch(OPENROUTER_ENDPOINT, {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${GROQ_API_KEY}`,
+                    "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
@@ -368,8 +370,7 @@
                         { role: "user", content: `سؤال الطالبة: ${userQuestion}` }
                     ],
                     temperature: 0.7,
-                    max_tokens: 1000,
-                    top_p: 0.95
+                    max_tokens: 1000
                 })
             });
             
@@ -396,8 +397,7 @@
             addMessageToUI("أستاذة الأزهر - AI Tutor", "عذراً عزيزتي، هناك عطل تقني مؤقت في الاتصال. تأكدي من اتصالك بالإنترنت أو حاولي بعد قليل. أنا هنا من أجلك دائماً 🌸", false, true);
             setTimeout(() => setStatus("✨ جاهزة", false), 4000);
         }
-    }
-    
+            }
     // ربط الأزرار
     sendBtn.addEventListener('click', sendUserMessage);
     aiRespondBtn.addEventListener('click', aiTutorRespondToLastUser);
